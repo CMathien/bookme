@@ -1,0 +1,63 @@
+bookme_api:
+  routes:
+    bookme_users:
+      prefix: /users
+      controller: Bookme\Controller\UserController
+      routes:
+        bookme_api_users:
+          method: GET
+          path: /
+          action: list
+        bookme_api_user_create:
+          method: POST
+          path: /
+          action: create
+        bookme_api_user_get:
+          method: GET
+          path: /(\d+)/
+          action: get
+        bookme_api_user_delete:
+          method: DELETE
+          path: /(\d+)/
+          action: delete
+        bookme_api_user_update:
+          method: PUT
+          path: /(\d+)/
+          action: update
+        bookme_api_user_update_partially:
+          method: PATCH
+          path: /(\d+)/
+          action: updatePartially
+        bookme_api_user_list_books:
+          method: GET
+          path: /(\d+)/books
+          action: listBooksByUsers
+    bookme_api_books:
+      prefix: /books
+      controller: Bookme\Controller\BookController
+      routes:
+        bookme_api_books_list:
+          path: /
+          method: GET
+          action: list
+        bookme_api_books_get:
+          path: /(\d+)/
+          method: GET
+          action: get
+        bookme_api_books_create:
+          path: /
+          method: POST
+          action: create
+        bookme_api_books_update:
+          path: /(\d+)/
+          method: PUT
+          action: update
+        bookme_api_books_update_partially:
+          path: /(\d+)/
+          method: PATCH
+          action: updatePartially
+        bookme_api_books_delete:
+          path: /(\d+)/
+          method: DELETE
+          action: delete
+    
