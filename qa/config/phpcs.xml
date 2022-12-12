@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<ruleset name="FabManager">
+
+    <description>Bookme coding standards</description>
+
+    <file>api</file>
+    <exclude-pattern>vendor</exclude-pattern>
+
+    <arg value="s" />
+    <arg name="colors" />
+    <arg name="extensions" value="php" />
+    <arg name="tab-width" value="4" />
+    <arg name="encoding" value="UTF-8" />
+
+    <rule ref="PSR1" />
+    <rule ref="PSR2" />
+    <rule ref="PSR12" />
+    <rule ref="PEAR">
+        <exclude name="PEAR.Commenting.FunctionComment.Missing" />
+        <exclude name="PEAR.Commenting.FileComment.Missing" />
+        <exclude name="PEAR.Commenting.ClassComment.Missing" />
+        <exclude name="PEAR.NamingConventions.ValidVariableName.PrivateNoUnderscore" />
+        <exclude name="PEAR.NamingConventions.ValidFunctionName.PrivateNoUnderscore" />
+    </rule>
+
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="120"/>
+            <property name="absoluteLineLimit" value="140"/>
+        </properties>
+    </rule>
+
+    <rule ref="Security" />
+</ruleset>

@@ -1,0 +1,85 @@
+#!/bin/sh
+
+PHPCS_BIN="./qa/vendor/bin/phpcs"
+PHPCS_FILE="./qa/config/phpcs.xml"
+PHPSTAN_BIN="./qa/vendor/bin/phpstan"
+
+PROJECT=`php -r "echo dirname(dirname(dirname(realpath('$0'))));"`
+PROJECT_AUTOLOAD="$PROJECT/api/vendor/autoload.php"
+PROJECT_SRC="$PROJECT/api/src"
+STAGED_FILES_CMD=`git diff --cached --name-only --diff-filter=d | grep \\\\.php`
+
+
+# Determine if a file list is passed
+if [ "$#" -eq 1 ]
+then
+    oIFS=$IFS
+    IFS='
+    '
+    SFILES="$1"
+    IFS=$oIFS
+fi
+SFILES=${SFILES:-$STAGED_FILES_CMD}
+
+###
+### PHP Lint
+###
+echo "Linting PHP files..."
+LINT_ERROR=0
+for FILE in $SFILES
+do
+    php -l -d display_errors=0 $PROJECT/$FILE > /dev/null
+    if [ $? != 0 ]
+    then
+        echo "  $FILE contains error(s)"
+        LINT_ERROR=1
+    fi
+    FILES="$FILES $PROJECT/$FILE"
+done
+if [ "$LINT_ERROR" -eq 1 ]
+then
+    echo "COMMIT FAILED: fix PHP syntax errors."
+    exit 1
+fi
+
+
+###
+### PHP_CodeSniffer
+###
+if [ "$FILES" != "" ]
+then
+    echo "Running PHP_CodeSniffer..."
+    $PHPCS_BIN --standard="$PHPCS_FILE" --error-severity=1 --warning-severity=6 $FILES
+    if [ $? != 0 ]
+    then
+        echo "COMMIT FAILED: fix PHP standard errors."
+        exit 2
+    fi
+fi
+
+
+###
+### PHPStan
+###
+if [ "$FILES" != "" ]
+then
+    echo "Running PHPStan..."
+    PHPSTAN_ERROR=0
+    PHPSTAN_OUTPUT=`$PHPSTAN_BIN analyse -a $PROJECT_AUTOLOAD --error-format=raw $PROJECT_SRC 2> /dev/null`
+    for FILE in $FILES
+    do
+        MATCH=`echo "$PHPSTAN_OUTPUT"| grep "$FILE"`
+        if [ "$MATCH" != "" ]
+        then
+            echo "$MATCH"
+            PHPSTAN_ERROR=1
+        fi
+    done
+    if [ "$PHPSTAN_ERROR" -eq 1 ]
+    then
+        echo "COMMIT FAILED: fix PHPStan errors."
+        exit 3
+    fi
+fi
+
+exit 0

@@ -163,7 +163,7 @@ CREATE TABLE comment(
    FOREIGN KEY(user_id) REFERENCES user(user_id)
 );
 
-CREATE TABLE locate1(
+CREATE TABLE locate(
    zipcode INT,
    city_id INT,
    PRIMARY KEY(zipcode, city_id),

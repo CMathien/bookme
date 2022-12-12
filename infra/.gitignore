@@ -1,0 +1,6 @@
+logs/**
+!logs/**/
+mysql/data/**
+
+.env
+!.gitkeep
