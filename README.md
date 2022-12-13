@@ -5,7 +5,7 @@ Book management app
 
 - [@cmathien](https://www.github.com/cmathien)
 
-## Project setup
+## API - Project setup
 ### Docker and SSL certificate
 
 - Copy `.env.dist` file to `.env` and define values
@@ -18,6 +18,8 @@ Book management app
   - `C:\Windows\System32\driver\etc\hosts` on Windows (edit as admin)
   - `127.0.0.1  api.bookme.local.com`
 - API is live at https://api.bookme.local.com
+
+- Run `docker exec -i -w /bookme/api bookme-php-1 composer install`
 
 ### QA
 
