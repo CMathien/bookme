@@ -181,3 +181,8 @@ CREATE TABLE donate(
    FOREIGN KEY(user_id) REFERENCES user(user_id),
    FOREIGN KEY(status_id) REFERENCES status(status_id)
 );
+
+CREATE TABLE api_key(
+   api_key TEXT NOT NULL
+   PRIMARY KEY (api_key)
+);

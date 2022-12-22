@@ -21,17 +21,17 @@ bookme_api:
           path: /(\d+)/
           action: delete
         bookme_api_user_update:
-          method: PUT
-          path: /(\d+)/
-          action: update
-        bookme_api_user_update_partially:
           method: PATCH
           path: /(\d+)/
-          action: updatePartially
+          action: update
         bookme_api_user_list_books:
           method: GET
           path: /(\d+)/books
           action: listBooksByUsers
+        bookme_api_user_password:
+          method: GET
+          path: /(\d+)/
+          action: checkPassword
     bookme_api_books:
       prefix: /books
       controller: Bookme\Controller\BookController
@@ -50,13 +50,33 @@ bookme_api:
           action: create
         bookme_api_books_update:
           path: /(\d+)/
-          method: PUT
+          method: PATCH
           action: update
-        bookme_api_books_update_partially:
+        bookme_api_books_delete:
+          path: /(\d+)/
+          method: DELETE
+          action: delete
+    bookme_api_genres:
+      prefix: /genres
+      controller: Bookme\Controller\GenreController
+      routes:
+        bookme_api_genres_list:
+          path: /
+          method: GET
+          action: list
+        bookme_api_genres_get:
+          path: /(\d+)/
+          method: GET
+          action: get
+        bookme_api_genres_create:
+          path: /
+          method: POST
+          action: create
+        bookme_api_genres_update:
           path: /(\d+)/
           method: PATCH
-          action: updatePartially
-        bookme_api_books_delete:
+          action: update
+        bookme_api_genres_delete:
           path: /(\d+)/
           method: DELETE
           action: delete
