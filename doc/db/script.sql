@@ -1,75 +1,90 @@
+DROP DATABASE IF EXISTS bookme;
+CREATE DATABASE bookme;
+USE bookme;
+
+DROP TABLE IF EXISTS book;
 CREATE TABLE book(
-   book_id COUNTER,
+   book_id INT NOT NULL AUTO_INCREMENT,
    book_title VARCHAR(255) NOT NULL,
    book_release_year INT NOT NULL,
    PRIMARY KEY(book_id)
 );
 
+DROP TABLE IF EXISTS author;
 CREATE TABLE author(
-   author_id COUNTER,
+   author_id INT NOT NULL AUTO_INCREMENT,
    author_last_name VARCHAR(255) NOT NULL,
    author_first_name VARCHAR(50) NOT NULL,
    PRIMARY KEY(author_id)
 );
 
+DROP TABLE IF EXISTS genre;
 CREATE TABLE genre(
-   genre_id COUNTER,
+   genre_id INT NOT NULL AUTO_INCREMENT,
    genre_label VARCHAR(50),
    PRIMARY KEY(genre_id)
 );
 
+DROP TABLE IF EXISTS zipcode;
 CREATE TABLE zipcode(
    zipcode INT,
    PRIMARY KEY(zipcode)
 );
 
+DROP TABLE IF EXISTS country;
 CREATE TABLE country(
-   country_id COUNTER,
+   country_id INT NOT NULL AUTO_INCREMENT,
    country_name VARCHAR(255),
    PRIMARY KEY(country_id)
 );
 
+DROP TABLE IF EXISTS isbn;
 CREATE TABLE isbn(
-   isbn COUNTER,
+   isbn INT NOT NULL AUTO_INCREMENT,
    book_id INT NOT NULL,
    PRIMARY KEY(isbn),
    FOREIGN KEY(book_id) REFERENCES book(book_id)
 );
 
+DROP TABLE IF EXISTS reading_status;
 CREATE TABLE reading_status(
-   reading_status_id COUNTER,
+   reading_status_id INT NOT NULL AUTO_INCREMENT,
    reading_status_label VARCHAR(50) NOT NULL,
    PRIMARY KEY(reading_status_id)
 );
 
+DROP TABLE IF EXISTS reaction;
 CREATE TABLE reaction(
-   reaction_id COUNTER,
+   reaction_id INT NOT NULL AUTO_INCREMENT,
    reaction_label VARCHAR(50),
    PRIMARY KEY(reaction_id)
 );
 
+DROP TABLE IF EXISTS status;
 CREATE TABLE status(
-   status_id COUNTER,
+   status_id INT NOT NULL AUTO_INCREMENT,
    status_label VARCHAR(50),
    PRIMARY KEY(status_id)
 );
 
+DROP TABLE IF EXISTS state;
 CREATE TABLE state(
-   state_id COUNTER,
+   state_id INT NOT NULL AUTO_INCREMENT,
    state_label VARCHAR(50) NOT NULL,
    PRIMARY KEY(state_id)
 );
 
+DROP TABLE IF EXISTS user;
 CREATE TABLE user(
-   user_id COUNTER,
+   user_id INT NOT NULL AUTO_INCREMENT,
    user_pseudo VARCHAR(255) NOT NULL,
    user_email VARCHAR(255) NOT NULL,
    user_password TEXT NOT NULL,
    user_avatar VARCHAR(255),
-   user_public_comments LOGICAL NOT NULL,
+   user_public_comments BOOLEAN NOT NULL DEFAULT TRUE,
    user_balance INT,
-   user_banned LOGICAL NOT NULL,
-   user_admin LOGICAL NOT NULL,
+   user_banned BOOLEAN NOT NULL DEFAULT FALSE,
+   user_admin BOOLEAN NOT NULL DEFAULT FALSE,
    zipcode INT NOT NULL,
    PRIMARY KEY(user_id),
    UNIQUE(user_pseudo),
@@ -77,16 +92,18 @@ CREATE TABLE user(
    FOREIGN KEY(zipcode) REFERENCES zipcode(zipcode)
 );
 
+DROP TABLE IF EXISTS city;
 CREATE TABLE city(
-   city_id COUNTER,
+   city_id INT NOT NULL AUTO_INCREMENT,
    city_name VARCHAR(255),
    country_id INT NOT NULL,
    PRIMARY KEY(city_id),
    FOREIGN KEY(country_id) REFERENCES country(country_id)
 );
 
+DROP TABLE IF EXISTS possessed_book;
 CREATE TABLE possessed_book(
-   possessed_book_id COUNTER,
+   possessed_book_id INT NOT NULL AUTO_INCREMENT,
    book_id INT NOT NULL,
    state_id INT,
    reaction_id INT,
@@ -100,9 +117,10 @@ CREATE TABLE possessed_book(
    FOREIGN KEY(user_id) REFERENCES user(user_id)
 );
 
+DROP TABLE IF EXISTS borrowing;
 CREATE TABLE borrowing(
    possessed_book_id INT,
-   borrowing_id COUNTER NOT NULL,
+   borrowing_id INT NOT NULL AUTO_INCREMENT,
    borrowing_start_date DATETIME NOT NULL,
    borrowing_end_date DATETIME NOT NULL,
    status_id INT NOT NULL,
@@ -114,18 +132,20 @@ CREATE TABLE borrowing(
    FOREIGN KEY(user_id) REFERENCES user(user_id)
 );
 
+DROP TABLE IF EXISTS reminder;
 CREATE TABLE reminder(
-   reminder_id COUNTER,
+   reminder_id INT NOT NULL AUTO_INCREMENT,
    reminder_date DATETIME NOT NULL,
    possessed_book_id INT NOT NULL,
    PRIMARY KEY(reminder_id),
    FOREIGN KEY(possessed_book_id) REFERENCES borrowing(possessed_book_id)
 );
 
+DROP TABLE IF EXISTS message;
 CREATE TABLE message(
    user_id INT,
    user_id_1 INT,
-   message_id COUNTER NOT NULL,
+   message_id INT NOT NULL AUTO_INCREMENT,
    message_content TEXT NOT NULL,
    message_date DATETIME,
    PRIMARY KEY(user_id, user_id_1),
@@ -134,7 +154,8 @@ CREATE TABLE message(
    FOREIGN KEY(user_id_1) REFERENCES user(user_id)
 );
 
-CREATE TABLE write(
+DROP TABLE IF EXISTS book_author;
+CREATE TABLE book_author(
    book_id INT,
    author_id INT,
    PRIMARY KEY(book_id, author_id),
@@ -142,7 +163,8 @@ CREATE TABLE write(
    FOREIGN KEY(author_id) REFERENCES author(author_id)
 );
 
-CREATE TABLE belong(
+DROP TABLE IF EXISTS book_genre;
+CREATE TABLE book_genre(
    book_id INT,
    genre_id INT,
    PRIMARY KEY(book_id, genre_id),
@@ -150,20 +172,22 @@ CREATE TABLE belong(
    FOREIGN KEY(genre_id) REFERENCES genre(genre_id)
 );
 
+DROP TABLE IF EXISTS comment;
 CREATE TABLE comment(
    book_id INT,
    user_id INT,
-   comment_id COUNTER NOT NULL,
+   comment_id INT NOT NULL AUTO_INCREMENT,
    comment_content TEXT NOT NULL,
    comment_date DATETIME NOT NULL,
-   comment_suggestion LOGICAL NOT NULL,
+   comment_suggestion BOOLEAN NOT NULL DEFAULT FALSE,
    PRIMARY KEY(book_id, user_id),
    UNIQUE(comment_id),
    FOREIGN KEY(book_id) REFERENCES book(book_id),
    FOREIGN KEY(user_id) REFERENCES user(user_id)
 );
 
-CREATE TABLE locate(
+DROP TABLE IF EXISTS zipcode_city;
+CREATE TABLE zipcode_city(
    zipcode INT,
    city_id INT,
    PRIMARY KEY(zipcode, city_id),
@@ -171,7 +195,8 @@ CREATE TABLE locate(
    FOREIGN KEY(city_id) REFERENCES city(city_id)
 );
 
-CREATE TABLE donate(
+DROP TABLE IF EXISTS donation;
+CREATE TABLE donation(
    possessed_book_id INT,
    donation_date DATETIME,
    user_id INT NOT NULL,
@@ -182,7 +207,8 @@ CREATE TABLE donate(
    FOREIGN KEY(status_id) REFERENCES status(status_id)
 );
 
+DROP TABLE IF EXISTS api_key;
 CREATE TABLE api_key(
-   api_key TEXT NOT NULL
+   api_key VARCHAR(255) NOT NULL,
    PRIMARY KEY (api_key)
 );
