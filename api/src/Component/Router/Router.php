@@ -47,7 +47,8 @@ class Router
                         throw new Exception\ControllerNotFoundException('Controller "' . $controller . '" not found.');
                     }
                     array_shift($parameters);
-
+var_dump($controller);
+var_dump($route['action']);
                     return call_user_func_array([new $controller(), $route['action']], $parameters);
                 }
             }

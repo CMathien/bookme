@@ -3,6 +3,7 @@
 namespace Bookme\API\App;
 
 use Bookme\API\Component\Router;
+use Bookme\API\Component\Authentication\Authentication;
 use Symfony\Component\Dotenv\Dotenv;
 
 class App
@@ -17,6 +18,7 @@ class App
     public function run(): void
     {
         $this->loadEnv();
+        $this->launchAuthentication();
         $this->runRouter();
     }
 
@@ -29,6 +31,12 @@ class App
     {
         $dotenv = new Dotenv();
         $dotenv->usePutenv()->loadEnv($this->basePath . '/.env');
+    }
+
+    private function launchAuthentication()
+    {
+        $auth = new Authentication();
+        $auth->authenticate();
     }
 
     private function runRouter(): void

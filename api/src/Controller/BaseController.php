@@ -46,6 +46,7 @@ abstract class BaseController
 
     public function list()
     {
+        var_dump('ok');
         $className = $this->getClassName();
         $classDAO = "Bookme\API\DataAccess\\" . $className . "DAO";
         $dao = new $classDAO($this->db);
