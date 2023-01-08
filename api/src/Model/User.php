@@ -110,4 +110,21 @@ class User extends Model
 
         return $this;
     }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'pseudo' => $this->getPseudo(),
+            'email' => $this->getEmail(),
+            'publicComments' => $this->getPublicComments(),
+            'avatar' => $this->getAvatar(),
+            'balance' => $this->getBalance(),
+            'admin' => 0,
+            'banned' => 0,
+            'zipcode' => [
+                "zipcode" => $this->getZipCode()->getZipCode()
+            ],
+        ];
+    }
 }

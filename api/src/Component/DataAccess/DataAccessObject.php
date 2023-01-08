@@ -12,6 +12,7 @@ use ReflectionClass;
 
 abstract class DataAccessObject
 {
+    const MODEL_PATH = "Bookme\API\Model\\";
     protected \PDO              $connection;
     protected \ReflectionClass  $modelReflector;
     protected string            $model;
@@ -77,7 +78,7 @@ abstract class DataAccessObject
 
                 $this->hydrateModel($instance, $row);
 
-                $instances[] = $instance;
+                $instances[] = $instance->toArray();
             }
 
             return $instances;
@@ -125,7 +126,8 @@ abstract class DataAccessObject
             $propertyType = $this->modelReflector->getProperty($propertyName)->getValue($entity);
 
             if (gettype($propertyType) === "object" && !$propertyType instanceof DateTime) {
-                $params[$propertyName] = $entity->{"get" . ucfirst($propertyName)}()->getId();
+                if ($propertyName == "zipCode") $params[$propertyName] = $entity->{"get" . ucfirst($propertyName)}()->getZipCode();
+                else $params[$propertyName] = $entity->{"get" . ucfirst($propertyName)}()->getId();
             } else if ($propertyType instanceof DateTime) {
                 $params[$propertyName] = $entity->{"get" . ucfirst($propertyName)}()->format("Y-m-d");
             } else {
@@ -135,14 +137,7 @@ abstract class DataAccessObject
 
         $columns = implode(', ', $columns);
         $placeholders = implode(', ', array_map(fn ($e) => ":$e", array_keys($params)));
-
-        $columns = strtolower(
-            preg_replace(
-                '/(?<=[a-z])([A-Z]+)/',
-                '_$1',
-                $columns
-            )
-        );
+        $columns = $this->switchCaseType($columns);
 
         $query = $this->prepareQuery($columns, $placeholders, $params);
 
@@ -168,7 +163,8 @@ abstract class DataAccessObject
         foreach ($this->columnMap() as $propertyName => $columnName) {
             if ($propertyName === 'id')
                 continue;
-
+            
+            $columns[] = "{$this->switchCaseType($columnName)} = :$propertyName";
             $columns[] = "$columnName = :$propertyName";
             $params[$propertyName] = $this
                 ->modelReflector
@@ -235,6 +231,12 @@ abstract class DataAccessObject
         foreach ($this->columnMap() as $propertyName => $columnName) {
             $property = $this->modelReflector->getProperty($propertyName);
 
+            $reflectionProperty = new \ReflectionProperty($property->class, $property->name);
+            $type = $reflectionProperty->getType()->getName();
+
+            $columnName = $this->switchCaseType($columnName);
+            if ($columnName == "user_zip_code") $columnName = "zipcode";
+
             // Make sure key exists in array
             if (!isset($row[$columnName])) {
                 throw new \Exception(
@@ -243,10 +245,30 @@ abstract class DataAccessObject
             }
 
             // TODO: convert the column to the appropriate type if we are able to
-            $property->setValue($instance, $row[$columnName]);
+            if ($type === "DateTime") {
+                $property->setValue($instance, new DateTime($row[$columnName]));
+            } else if (str_starts_with($type, self::MODEL_PATH)) {
+                $object = new $type();
+                if ($type == "Bookme\API\Model\ZipCode") $object->setZipCode($row[$columnName]);
+                else $object->setId($row[$columnName]);
+                $property->setValue($instance, $object);
+            } else {
+                $property->setValue($instance, $row[$columnName]);
+            }
         }
 
         $instance->wasLoaded = true;
         return $instance;
+    }
+
+    protected function switchCaseType(string $attribute): string
+    {
+        return strtolower(
+            preg_replace(
+                '/(?<=[a-z])([A-Z]+)/',
+                '_$1',
+                $attribute
+            )
+        );
     }
 }

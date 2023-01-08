@@ -60,12 +60,12 @@ abstract class BaseController
         $this->sendResponse($response, 200);
     }
 
-    public function getById(int $id)
+    public function get(int $id)
     {
         $className = $this->getClassName();
         $classDAO = "Bookme\API\DataAccess\\" . $className . "DAO";
         $dao = new $classDAO($this->db);
-        $record = $dao->getById($id);
+        $record = $dao->getOne($id);
         if (null === $record) {
             $response = [
                 'status' => strtoupper($className) . '_NOT_FOUND',
@@ -88,7 +88,8 @@ abstract class BaseController
     {
         $datas = $this->readInput();
 
-        $className = $this->getClassName();
+        if (isset($datas["admin"]) && $datas["admin"] == 1) $className = "Admin";
+        else $className = $this->getClassName();
         $classDAO = "Bookme\API\DataAccess\\" . $className . "DAO";
         $classLogic = "Bookme\API\Logic\\" . $className . "Logic";
         $logic = new $classLogic($this->db);
@@ -180,7 +181,7 @@ abstract class BaseController
         }
 
         $dao = new $classDAO($this->db);
-        $record = $dao->getById($id);
+        $record = $dao->getOne($id);
         if (!$record) {
             $response = [
                 'status' => strtoupper($className) . '_NOT_FOUND',

@@ -23,7 +23,7 @@ abstract class BaseLogic
         $this->errors = $errors;
     }
 
-    private function getClassName(): string
+    protected function getClassName(): string
     {
         $className = str_replace("Bookme\API\Logic\\", "", substr(get_class($this), 0, -5));
         return $className;
