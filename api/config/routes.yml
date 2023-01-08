@@ -80,4 +80,12 @@ bookme_api:
           path: /(\d+)/
           method: DELETE
           action: delete
+    bookme_api_countries:
+      prefix: /countries
+      controller: Bookme\Controller\CountryController
+      routes:
+        bookme_api_countries_list:
+          path: /
+          method: GET
+          action: list
     
