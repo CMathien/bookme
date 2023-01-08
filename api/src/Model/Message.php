@@ -2,7 +2,9 @@
 
 namespace Bookme\API\Model;
 
-class Message
+use Bookme\API\Component\Model\Model;
+
+class Message extends Model
 {
     private string $content;
     private \DateTime $date;

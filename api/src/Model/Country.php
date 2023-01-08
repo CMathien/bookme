@@ -2,7 +2,9 @@
 
 namespace Bookme\API\Model;
 
-class Country
+use Bookme\API\Component\Model\Model;
+
+class Country extends Model
 {
     private int $id;
     private string $country;

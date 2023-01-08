@@ -2,7 +2,9 @@
 
 namespace Bookme\API\Model;
 
-class Author
+use Bookme\API\Component\Model\Model;
+
+class Author extends Model
 {
     private int $id;
     private string $firstName;

@@ -2,7 +2,9 @@
 
 namespace Bookme\API\Model;
 
-class Comment
+use Bookme\API\Component\Model\Model;
+
+class Comment extends Model
 {
     private string $content;
     private \DateTime $date;

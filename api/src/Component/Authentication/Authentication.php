@@ -32,7 +32,6 @@ class Authentication
             $sth->execute(['key' => $key]);
             $result = $sth->fetch();
             if ($result[0] == 0) $error++;
-            die;
         } else $error++;
         
         if ($error > 0) {

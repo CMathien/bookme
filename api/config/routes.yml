@@ -2,7 +2,7 @@ bookme_api:
   routes:
     bookme_users:
       prefix: /users
-      controller: Bookme\Controller\UserController
+      controller: Bookme\API\Controller\UserController
       routes:
         bookme_api_users:
           method: GET
@@ -34,7 +34,7 @@ bookme_api:
           action: checkPassword
     bookme_api_books:
       prefix: /books
-      controller: Bookme\Controller\BookController
+      controller: Bookme\API\Controller\BookController
       routes:
         bookme_api_books_list:
           path: /
@@ -58,7 +58,7 @@ bookme_api:
           action: delete
     bookme_api_genres:
       prefix: /genres
-      controller: Bookme\Controller\GenreController
+      controller: Bookme\API\Controller\GenreController
       routes:
         bookme_api_genres_list:
           path: /
@@ -80,12 +80,4 @@ bookme_api:
           path: /(\d+)/
           method: DELETE
           action: delete
-    bookme_api_countries:
-      prefix: /countries
-      controller: Bookme\Controller\CountryController
-      routes:
-        bookme_api_countries_list:
-          path: /
-          method: GET
-          action: list
     

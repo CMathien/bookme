@@ -2,7 +2,9 @@
 
 namespace Bookme\API\Model;
 
-class Donation
+use Bookme\API\Component\Model\Model;
+
+class Donation extends Model
 {
     private \DateTime $date;
     private string $status;

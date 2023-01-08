@@ -62,7 +62,7 @@ abstract class DataAccessObject
      *
      * @return Model[]
      */
-    public function getMany(array $options): array
+    public function getMany(array $options = []): array
     {
         $statement = $this->connection->prepare("select * from {$this->table}");
         $result = $statement->execute();

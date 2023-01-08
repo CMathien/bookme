@@ -2,7 +2,9 @@
 
 namespace Bookme\API\Model;
 
-class Borrowing
+use Bookme\API\Component\Model\Model;
+
+class Borrowing extends Model
 {
     private \DateTime $startDate;
     private \DateTime $endDate;

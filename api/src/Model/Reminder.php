@@ -2,7 +2,9 @@
 
 namespace Bookme\API\Model;
 
-class Reminder
+use Bookme\API\Component\Model\Model;
+
+class Reminder extends Model
 {
     private int $id;
     private \DateTime $date;

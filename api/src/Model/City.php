@@ -2,7 +2,9 @@
 
 namespace Bookme\API\Model;
 
-class City
+use Bookme\API\Component\Model\Model;
+
+class City extends Model
 {
     private int $id;
     private string $city;
