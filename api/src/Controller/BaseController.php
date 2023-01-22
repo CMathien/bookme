@@ -88,7 +88,8 @@ abstract class BaseController
     {
         $datas = $this->readInput();
 
-        if (isset($datas["admin"]) && $datas["admin"] == 1) $className = "Admin";
+        if (isset($datas["banned"]) && $datas["banned"] != null) $className = "BannedUser";
+        elseif (isset($datas["admin"]) && $datas["admin"] == 1) $className = "Admin";
         else $className = $this->getClassName();
         $classDAO = "Bookme\API\DataAccess\\" . $className . "DAO";
         $classLogic = "Bookme\API\Logic\\" . $className . "Logic";
@@ -123,49 +124,13 @@ abstract class BaseController
         $this->sendResponse($response, 201);
     }
 
-    public function replace(int $id)
-    {
-        $datas = $this->readInput();
-
-        $className = $this->getClassName();
-        $classDAO = "Bookme\API\DataAccess\\" . $className . "DAO";
-        $classLogic = "Bookme\API\Logic\\" . $className . "Logic";
-
-        $logic = new $classLogic($this->db);
-        $object = $logic->create($datas);
-        if (null === $object) {
-            $response = [
-                'status' => strtoupper($className) . '_NOT_UPDATED',
-                'message' => $className . ' could not be updated',
-                'data' => $logic->getErrors(),
-            ];
-            $this->sendResponse($response, 400);
-        }
-
-        $dao = new $classDAO($this->db);
-        $object = $dao->update($object);
-        if (null === $object) {
-            $response = [
-                'status' => strtoupper($className) . '_NOT_UPDATED',
-                'message' => $className . ' could not be updated',
-                'data' => '',
-            ];
-            $this->sendResponse($response, 400);
-        }
-
-        $response = [
-            'status' => strtoupper($className) . '_UPDATED',
-            'message' => '',
-            'data' => $object->toArray(),
-        ];
-        $this->sendResponse($response, 200);
-    }
-
     public function update(int $id)
     {
          $datas = $this->readInput();
         
-        $className = $this->getClassName();
+        if (isset($datas["banned"]) && $datas["banned"] != null) $className = "BannedUser";
+        elseif (isset($datas["admin"]) && $datas["admin"] == 1) $className = "Admin";
+        else $className = $this->getClassName();
         $classDAO = "Bookme\API\DataAccess\\" . $className . "DAO";
         $classLogic = "Bookme\API\Logic\\" . $className . "Logic";
 
@@ -189,7 +154,7 @@ abstract class BaseController
             ];
             $this->sendResponse($response, 404);
         }
-
+        $object->setId($id);
         $result = $dao->update($object, $id);
         if (!$result) {
             $response = [
@@ -205,5 +170,26 @@ abstract class BaseController
             ];
             $this->sendResponse($response, 200);
         }
+    }
+
+    public function delete(int $id)
+    {
+        $className = $this->getClassName();
+        $classDAO = "Bookme\API\DataAccess\\" . $className . "DAO";
+        $dao = new $classDAO($this->db);
+        $record = $dao->getOne($id);
+
+        if (null === $record) {
+            $response = [
+                'status' => strtoupper($className) . '_NOT_FOUND',
+                'message' => $className . ' not found',
+                'data' => '',
+            ];
+            $this->sendResponse($response, 404);
+        }
+
+        $dao->delete($id);
+
+        $this->sendResponse([], 204);
     }
 }

@@ -83,7 +83,7 @@ CREATE TABLE user(
    user_avatar VARCHAR(255),
    user_public_comments BOOLEAN NOT NULL DEFAULT TRUE,
    user_balance INT,
-   user_banned BOOLEAN NOT NULL DEFAULT FALSE,
+   user_banned DATETIME NULL DEFAULT NULL,
    user_admin BOOLEAN NOT NULL DEFAULT FALSE,
    zipcode INT NOT NULL,
    PRIMARY KEY(user_id),

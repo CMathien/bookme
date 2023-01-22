@@ -113,18 +113,21 @@ class User extends Model
 
     public function toArray(): array
     {
-        return [
-            'id' => $this->getId(),
-            'pseudo' => $this->getPseudo(),
-            'email' => $this->getEmail(),
-            'publicComments' => $this->getPublicComments(),
-            'avatar' => $this->getAvatar(),
-            'balance' => $this->getBalance(),
-            'admin' => 0,
-            'banned' => 0,
-            'zipcode' => [
-                "zipcode" => $this->getZipCode()->getZipCode()
-            ],
-        ];
+        if ($this->isInitialized("id")) $array['id'] = $this->getId();
+        if ($this->isInitialized("pseudo")) $array['pseudo'] = $this->getPseudo();
+        if ($this->isInitialized("email")) $array['email'] = $this->getEmail();
+        if ($this->isInitialized("publicComments")) $array['publicComments'] = $this->getPublicComments();
+        if ($this->isInitialized("avatar")) $array['avatar'] = $this->getAvatar();
+        if ($this->isInitialized("balance")) $array['balance'] = $this->getBalance();
+        if ($this->isInitialized("zipCode")) $array['zipcode'] = ["zipcode" => $this->getZipCode()->getZipCode()];
+        $array['admin'] = 0;
+        $array['banned'] = null;
+        return $array;
+    }
+
+    public function isInitialized($param)
+    {
+        $rp = new \ReflectionProperty('Bookme\API\Model\User', $param);
+        return $rp->isInitialized($this);
     }
 }

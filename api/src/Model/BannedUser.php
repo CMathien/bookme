@@ -4,17 +4,24 @@ namespace Bookme\API\Model;
 
 class BannedUser extends User
 {
-    private string $date;
+    private \DateTime $banned;
 
-    public function getDate()
+    public function getBanned()
     {
-        return $this->date;
+        return $this->banned;
     }
 
-    public function setDate($date)
+    public function setBanned(\DateTime $date)
     {
-        $this->date = $date;
+        $this->banned = $date;
 
         return $this;
+    }
+
+    public function toArray(): array
+    {
+        $array = parent::toArray();
+        $array["banned"] = $this->getBanned();
+        return $array;
     }
 }

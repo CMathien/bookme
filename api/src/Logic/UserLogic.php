@@ -3,6 +3,8 @@
 namespace Bookme\API\Logic;
 
 use Bookme\API\Model\ZipCode;
+use Bookme\API\DataAccess\UserDAO;
+use DateTime;
 
 class UserLogic extends BaseLogic
 {
@@ -21,15 +23,17 @@ class UserLogic extends BaseLogic
 
     protected function validate(array $datas)
     {
-        $errors = [];
-
-        if (!$this->isValidEmail($datas["email"])) {
-            array_push($errors, ["error" => "invalid email", "message" => "the email is not valid"]);
+        if (isset($datas["email"])) {
+            if (!$this->isValidEmail($datas["email"])) {
+                array_push($this->errors, ["error" => "invalid email", "message" => "the email is not valid"]);
+            }
+            $this->emailAlreadyExists($datas["email"]);
         }
+        if (isset($datas["pseudo"])) $this->pseudoAlreadyExists($datas["pseudo"]);
 
-        if (!$this->isValidPassword($datas["password"])) {
+        if (isset($datas["password"]) && !$this->isValidPassword($datas["password"])) {
             array_push(
-                $errors,
+                $this->errors,
                 [
                     "error" => "invalid password",
                     "message" => "password must contain at least 8 characters and must include number, uppercase and lowercase letters"
@@ -37,7 +41,7 @@ class UserLogic extends BaseLogic
             );
         }
 
-        $this->setErrors($errors);
+        $this->setErrors($this->errors);
     }
 
     public function create(array $datas): ?object
@@ -47,14 +51,47 @@ class UserLogic extends BaseLogic
             return null;
         }
 
-        if ($datas["admin"] == 1) $modelClassName = "Bookme\API\Model\Admin";
+        if (isset($datas["banned"]) && $datas["banned"] != null) $modelClassName = "Bookme\API\Model\BannedUser";
+        elseif (isset($datas["admin"]) && $datas["admin"] == 1) $modelClassName = "Bookme\API\Model\Admin";
         else $modelClassName = "Bookme\API\Model\\" . $this->getClassName();
         $model = new $modelClassName();
-
         foreach ($datas as $key => $value) {
-            if ($key != "admin") $this->iterateProperties($model, $key, $value);
+            if ($key != "admin" && $key != "banned") $this->iterateProperties($model, $key, $value);
         }
-
+        if (isset($datas["banned"]) && $datas["banned"] != null) {
+            $date = new \DateTime();
+            $model->setBanned($date);
+        }
         return $model;
+    }
+
+    public function pseudoAlreadyExists(string $pseudo)
+    {
+        $daoClassName = new UserDAO($this->db);
+        $result = $daoClassName->getMany(["user_pseudo = \"$pseudo\""]);
+        if (!empty($result)) {
+            array_push(
+                $this->errors,
+                [
+                    "error" => "invalid pseudo",
+                    "message" => "the pseudo already exists"
+                ]
+            );
+        }
+    }
+
+    public function emailAlreadyExists(string $email)
+    {
+        $daoClassName = new UserDAO($this->db);
+        $result = $daoClassName->getMany(["user_email = \"$email\""]);
+        if (!empty($result)) {
+            array_push(
+                $this->errors,
+                [
+                    "error" => "invalid email",
+                    "message" => "the email already exists"
+                ]
+            );
+        }
     }
 }

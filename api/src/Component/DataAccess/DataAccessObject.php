@@ -24,6 +24,8 @@ abstract class DataAccessObject
         $explodedClassName = substr(end($explodedClassName), 0, -3);
         $this->model = "Bookme\API\Model\\" . $explodedClassName;
         $this->table = strtolower($explodedClassName);
+        if ($this->table === "admin") $this->table = "user";
+        elseif ($this->table === "banneduser") $this->table = "user";
         $this->connection = $connection;
         $this->modelReflector = new \ReflectionClass($this->model);
     }
@@ -46,9 +48,7 @@ abstract class DataAccessObject
         } else {
             if ($row) {
                 $instance = $this->modelReflector->newInstance();
-
                 $this->hydrateModel($instance, $row);
-
                 return $instance;
             }
 
@@ -65,14 +65,17 @@ abstract class DataAccessObject
      */
     public function getMany(array $options = []): array
     {
-        $statement = $this->connection->prepare("select * from {$this->table}");
+        if (!empty($options)) {
+            $where = " where " . implode("and", $options);
+        }
+        $query = "select * from {$this->table}";
+        if (isset($where)) $query .= $where;
+        $statement = $this->connection->prepare($query);
         $result = $statement->execute();
         $rows = $statement->fetchAll();
 
-        if (!$result) {
-            throw new DatabaseError("Database error: {$statement->errorInfo()}");
-        } else {
-            $instances = [];
+        $instances = [];
+        if (count($rows) > 0) {
             foreach ($rows as $row) {
                 $instance = new $this->model();
 
@@ -80,9 +83,8 @@ abstract class DataAccessObject
 
                 $instances[] = $instance->toArray();
             }
-
-            return $instances;
         }
+        return $instances;
     }
 
     /**
@@ -95,21 +97,16 @@ abstract class DataAccessObject
     public function save(Model $entity): ?Model
     {
         if (!$entity instanceof $this->model) {
-            throw new InvalidArgumentException(
-                "Error: expected instance of {$this->model} got " . get_class($entity)
-            );
+            throw new InvalidArgumentException("Error: expected instance of {$this->model} got " . get_class($entity));
         }
-
         if ($this->shouldUpdate($entity)) {
             $this->update($entity);
         } else {
             $id = $this->insert($entity);
-
             if ($this->modelReflector->hasMethod('setId')) {
                 $this->modelReflector->getMethod('setId')->invoke($entity, $id);
             }
         }
-
         return $entity;
     }
 
@@ -120,18 +117,20 @@ abstract class DataAccessObject
         foreach ($this->columnMap() as $propertyName => $columnName) {
             if ($propertyName === 'id')
                 continue;
+            $rp = new \ReflectionProperty(get_class($entity), $propertyName);
+            if ($rp->isInitialized($entity)) {
+                $columns[] = $columnName;
 
-            $columns[] = $columnName;
+                $propertyType = $this->modelReflector->getProperty($propertyName)->getValue($entity);
 
-            $propertyType = $this->modelReflector->getProperty($propertyName)->getValue($entity);
-
-            if (gettype($propertyType) === "object" && !$propertyType instanceof DateTime) {
-                if ($propertyName == "zipCode") $params[$propertyName] = $entity->{"get" . ucfirst($propertyName)}()->getZipCode();
-                else $params[$propertyName] = $entity->{"get" . ucfirst($propertyName)}()->getId();
-            } else if ($propertyType instanceof DateTime) {
-                $params[$propertyName] = $entity->{"get" . ucfirst($propertyName)}()->format("Y-m-d");
-            } else {
-                $params[$propertyName] = $this->modelReflector->getProperty($propertyName)->getValue($entity);
+                if (gettype($propertyType) === "object" && !$propertyType instanceof DateTime) {
+                    if ($propertyName == "zipCode") $params[$propertyName] = $entity->{"get" . ucfirst($propertyName)}()->getZipCode();
+                    else $params[$propertyName] = $entity->{"get" . ucfirst($propertyName)}()->getId();
+                } else if ($propertyType instanceof DateTime) {
+                    $params[$propertyName] = $entity->{"get" . ucfirst($propertyName)}()->format("Y-m-d H:i:s");
+                } else {
+                    $params[$propertyName] = $this->modelReflector->getProperty($propertyName)->getValue($entity);
+                }
             }
         }
 
@@ -156,31 +155,48 @@ abstract class DataAccessObject
         return [$statement, $result];
     }
 
-    protected function update(Model $entity): void
+    public function update(Model $entity): ?Model
     {
         $columns = [];
         $params = [];
+
         foreach ($this->columnMap() as $propertyName => $columnName) {
             if ($propertyName === 'id')
                 continue;
-            
-            $columns[] = "{$this->switchCaseType($columnName)} = :$propertyName";
-            $columns[] = "$columnName = :$propertyName";
-            $params[$propertyName] = $this
-                ->modelReflector
-                ->getProperty($propertyName)
-                ->getValue($entity);
+            $rp = new \ReflectionProperty(get_class($entity), $propertyName);
+            if ($rp->isInitialized($entity)) {
+                $columns[] = "{$this->switchCaseType($columnName)} = :$propertyName";
+                $params[$propertyName] = $this
+                    ->modelReflector
+                    ->getProperty($propertyName)
+                    ->getValue($entity);
+            }
         }
-
 
         $columns = implode(', ', $columns);
 
-        $statement = $this->connection->prepare("update {$this->table} set $columns where id = {$entity->{'getId'}()}");
-        $result = $statement->execute($params);
+        $mappedParams = array_map(
+            function ($e) {
+                if ($e instanceof Model) {
+                    return $e->{'getId'}();
+                } else if ($e instanceof \DateTime) {
+                    if ($e != null) {
+                        return $e->format('Y-m-d H:i:s');
+                    } else return null;
+                }
+                return $e;
+            },
+            $params
+        );
+
+        $statement = $this->connection->prepare("update {$this->table} set $columns where {$this->table}_id = {$entity->{'getId'}()}");
+
+        $result = $statement->execute($mappedParams);
 
         if (!$result) {
             throw new DatabaseError("Database update error: {$statement->errorInfo()}");
         }
+        return $this->getOne($entity->{'getId'}());
     }
 
     /**
@@ -192,7 +208,12 @@ abstract class DataAccessObject
      */
     public function delete(int $id): bool
     {
-        return true;
+        $statement = $this->connection->prepare("delete from {$this->table} where {$this->table}_id = :id");
+        if ($statement->execute(['id' => $id])) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -238,7 +259,7 @@ abstract class DataAccessObject
             if ($columnName == "user_zip_code") $columnName = "zipcode";
 
             // Make sure key exists in array
-            if (!isset($row[$columnName])) {
+            if (!isset($row[$columnName]) && $columnName != "user_banned") {
                 throw new \Exception(
                     "Failed to initialize property '{$propertyName}' of model '{$this->model}', missing column '$columnName'"
                 );
@@ -246,7 +267,9 @@ abstract class DataAccessObject
 
             // TODO: convert the column to the appropriate type if we are able to
             if ($type === "DateTime") {
-                $property->setValue($instance, new DateTime($row[$columnName]));
+                if ($row[$columnName] != null) {
+                    $property->setValue($instance, new DateTime($row[$columnName]));
+                }
             } else if (str_starts_with($type, self::MODEL_PATH)) {
                 $object = new $type();
                 if ($type == "Bookme\API\Model\ZipCode") $object->setZipCode($row[$columnName]);
@@ -256,8 +279,6 @@ abstract class DataAccessObject
                 $property->setValue($instance, $row[$columnName]);
             }
         }
-
-        $instance->wasLoaded = true;
         return $instance;
     }
 

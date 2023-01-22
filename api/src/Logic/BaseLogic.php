@@ -5,7 +5,7 @@ namespace Bookme\API\Logic;
 abstract class BaseLogic
 {
     protected \PDO $db;
-    private array $errors;
+    protected array $errors;
 
     public function __construct(\PDO $db)
     {
