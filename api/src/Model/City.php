@@ -7,42 +7,51 @@ use Bookme\API\Component\Model\Model;
 class City extends Model
 {
     private int $id;
-    private string $city;
+    private string $name;
     private Country $country;
 
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function setId($id)
+    public function setId(int $id): City
     {
         $this->id = $id;
 
         return $this;
     }
 
-    public function getCity()
+    public function getName(): string
     {
-        return $this->city;
+        return $this->name;
     }
 
-    public function setCity($city)
+    public function setName(string $name): City
     {
-        $this->city = $city;
+        $this->name = $name;
 
         return $this;
     }
 
-    public function getCountry()
+    public function getCountry(): Country
     {
         return $this->country;
     }
 
-    public function setCountry($country)
+    public function setCountry(Country $country): City
     {
         $this->country = $country;
 
         return $this;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            "id" => $this->getId(),
+            "name" => $this->getName(),
+            "country" => $this->getCountry()->getId(),
+        ];
     }
 }

@@ -257,6 +257,7 @@ abstract class DataAccessObject
 
             $columnName = $this->switchCaseType($columnName);
             if ($columnName == "user_zip_code") $columnName = "zipcode";
+            elseif ($columnName == "city_country") $columnName = "country_id";
 
             // Make sure key exists in array
             if (!isset($row[$columnName]) && $columnName != "user_banned") {
