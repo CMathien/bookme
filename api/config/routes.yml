@@ -126,7 +126,7 @@ bookme_api:
           action: delete
     bookme_api_zipcodes:
       prefix: /zipcodes
-      controller: Bookme\API\Controller\CityController
+      controller: Bookme\API\Controller\ZipCodeController
       routes:
         bookme_api_zipcodes_list:
           path: /
@@ -140,12 +140,16 @@ bookme_api:
           path: /
           method: POST
           action: create
-        bookme_api_zipcodes_update:
-          path: /(\d+)/
-          method: PATCH
-          action: update
         bookme_api_zipcodes_delete:
           path: /(\d+)/
           method: DELETE
           action: delete
+        bookme_api_zipcodes_link_city:
+          path: /(\d+)/link/
+          method: POST
+          action: linkToCity
+        bookme_api_zipcodes_unlink_city:
+          path: /(\d+)/unlink/
+          method: DELETE
+          action: unlinkCity
     

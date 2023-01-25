@@ -4,32 +4,26 @@ namespace Bookme\API\Model;
 
 use Bookme\API\Component\Model\Model;
 
-class ZipCode extends Model
+class Zipcode extends Model
 {
-    private string $zipCode;
-    private City $city;
+    private string $zipcode;
 
-    public function getZipCode()
+    public function getZipcode()
     {
-        return $this->zipCode;
+        return $this->zipcode;
     }
 
-    public function setZipCode($zipCode)
+    public function setZipcode($zipcode)
     {
-        $this->zipCode = $zipCode;
+        $this->zipcode = $zipcode;
 
         return $this;
     }
 
-    public function getCity()
+    public function toArray()
     {
-        return $this->city;
-    }
-
-    public function setCity($city)
-    {
-        $this->city = $city;
-
-        return $this;
+        return [
+            "zipcode" => $this->zipcode,
+        ];
     }
 }

@@ -126,7 +126,7 @@ abstract class BaseController
 
     public function update(int $id)
     {
-         $datas = $this->readInput();
+        $datas = $this->readInput();
         
         if (isset($datas["banned"]) && $datas["banned"] != null) $className = "BannedUser";
         elseif (isset($datas["admin"]) && $datas["admin"] == 1) $className = "Admin";
