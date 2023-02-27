@@ -1,4 +1,4 @@
-INSERT INTO country (country_name) VALUES
+INSERT IGNORE INTO country (country_name) VALUES
 ("Afghanistan"),
 ("Afrique du Sud"),
 ("Albanie"),

@@ -48,10 +48,15 @@ class Author extends Model
 
     public function toArray(): array
     {
-        return [
-            "id" => $this->getId(),
-            "first name" => $this->getFirstName(),
-            "last name" => $this->getLastName(),
-        ];
+        if ($this->isInitialized("id")) $array["id"] = $this->getId();
+        if ($this->isInitialized("firstName")) $array["first name"] = $this->getFirstName();
+        if ($this->isInitialized("lastName")) $array["last name"] = $this->getLastName();
+        return $array;
+    }
+
+    public function isInitialized($param)
+    {
+        $rp = new \ReflectionProperty('Bookme\API\Model\Author', $param);
+        return $rp->isInitialized($this);
     }
 }

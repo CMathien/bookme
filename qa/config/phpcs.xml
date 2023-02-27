@@ -21,6 +21,7 @@
         <exclude name="PEAR.Commenting.ClassComment.Missing" />
         <exclude name="PEAR.NamingConventions.ValidVariableName.PrivateNoUnderscore" />
         <exclude name="PEAR.NamingConventions.ValidFunctionName.PrivateNoUnderscore" />
+        <exclude name="PSR12.ControlStructures.ControlStructureSpacing.FirstExpressionLine" />
     </rule>
 
     <rule ref="Generic.Files.LineLength">

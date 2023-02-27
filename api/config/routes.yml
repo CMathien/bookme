@@ -76,6 +76,30 @@ bookme_api:
           path: /(\d+)/comment/
           method: POST
           action: comment
+        bookme_api_books_link_isbn:
+          path: /(\d+)/isbn/
+          method: POST
+          action: linkToIsbn
+        bookme_api_books_unlink_isbn:
+          path: /(\d+)/isbn/
+          method: DELETE
+          action: unlinkIsbn
+        bookme_api_books_link_author:
+          path: /(\d+)/author/
+          method: POST
+          action: linkToAuthor
+        bookme_api_books_unlink_author:
+          path: /(\d+)/author/(\d+)/
+          method: DELETE
+          action: unlinkAuthor
+        bookme_api_books_link_genre:
+          path: /(\d+)/genre/
+          method: POST
+          action: linkToGenre
+        bookme_api_books_unlink_genre:
+          path: /(\d+)/genre/(\d+)/
+          method: DELETE
+          action: unlinkGenre
     bookme_api_authors:
       prefix: /authors
       controller: Bookme\API\Controller\AuthorController

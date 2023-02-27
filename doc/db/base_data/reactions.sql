@@ -1,0 +1,1 @@
+INSERT IGNORE INTO reaction (reaction_label) VALUES ("coup de coœur"), ("surprise"), ("déception"), ("tristesse"), ("palpitant"), ("passable"), ("détesté");

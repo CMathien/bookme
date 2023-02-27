@@ -1,0 +1,1 @@
+INSERT IGNORE INTO reading_status (reading_status_label) VALUES ("Non lu"), ("En cours"), ("Lu"), ("À lire");

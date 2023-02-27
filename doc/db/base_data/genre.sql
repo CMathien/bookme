@@ -1,0 +1,1 @@
+INSERT IGNORE INTO genre (genre_label) VALUES ("BD"), ("Manga"), ("Humour"), ("Jeunesse"), ("Young Adult"), ("Roman"), ("Nouvelle"), ("Théâtre"), ("Poésie"), ("Policier"), ("Thriller"), ("Fantasy"), ("Science-fiction"), ("Art"), ("Culture"), ("Société"), ("Vie pratique"), ("Nature"), ("Loisirs"), ("Scolaire"), ("Universitaire"), ("Savoirs");

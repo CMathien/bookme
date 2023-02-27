@@ -40,10 +40,12 @@ CREATE TABLE country(
 
 DROP TABLE IF EXISTS isbn;
 CREATE TABLE isbn(
-   isbn INT NOT NULL,
+   isbn VARCHAR(14) NOT NULL,
    book_id INT NOT NULL,
    PRIMARY KEY(isbn),
-   FOREIGN KEY(book_id) REFERENCES book(book_id) ON DELETE CASCADE
+   CONSTRAINT `fk_book`
+    FOREIGN KEY (book_id) REFERENCES book (book_id)
+    ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS reading_status;
@@ -98,7 +100,9 @@ CREATE TABLE city(
    city_name VARCHAR(255),
    country_id INT NOT NULL,
    PRIMARY KEY(city_id),
-   FOREIGN KEY(country_id) REFERENCES country(country_id) ON DELETE CASCADE
+   CONSTRAINT `fk_country`
+    FOREIGN KEY (country_id) REFERENCES country (country_id)
+    ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS possessed_book;
@@ -110,11 +114,15 @@ CREATE TABLE possessed_book(
    reading_status_id INT,
    user_id INT NOT NULL,
    PRIMARY KEY(possessed_book_id),
-   FOREIGN KEY(book_id) REFERENCES book(book_id)  ON DELETE CASCADE,
+   CONSTRAINT `fk_book`
+    FOREIGN KEY (book_id) REFERENCES book (book_id),
+    ON DELETE CASCADE,
    FOREIGN KEY(state_id) REFERENCES state(state_id),
    FOREIGN KEY(reaction_id) REFERENCES reaction(reaction_id),
    FOREIGN KEY(reading_status_id) REFERENCES reading_status(reading_status_id),
-   FOREIGN KEY(user_id) REFERENCES user(user_id) ON DELETE CASCADE
+   CONSTRAINT `fk_user`
+    FOREIGN KEY (user_id) REFERENCES user (user_id)
+    ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS borrowing;
@@ -127,9 +135,13 @@ CREATE TABLE borrowing(
    user_id INT NOT NULL,
    PRIMARY KEY(possessed_book_id),
    UNIQUE(borrowing_id),
-   FOREIGN KEY(possessed_book_id) REFERENCES possessed_book(possessed_book_id) ON DELETE CASCADE,
+   CONSTRAINT `fk_possessed_book`
+    FOREIGN KEY (possessed_book_id) REFERENCES possessed_book (possessed_book_id)
+    ON DELETE CASCADE,
    FOREIGN KEY(status_id) REFERENCES status(status_id),
-   FOREIGN KEY(user_id) REFERENCES user(user_id) ON DELETE CASCADE
+   CONSTRAINT `fk_user`
+    FOREIGN KEY (user_id) REFERENCES user (user_id)
+    ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS reminder;
@@ -138,7 +150,10 @@ CREATE TABLE reminder(
    reminder_date DATETIME NOT NULL,
    possessed_book_id INT NOT NULL,
    PRIMARY KEY(reminder_id),
-   FOREIGN KEY(possessed_book_id) REFERENCES borrowing(possessed_book_id) ON DELETE CASCADE
+   FOREIGN KEY(possessed_book_id) REFERENCES borrowing(possessed_book_id) ON DELETE 
+   CONSTRAINT `fk_possessed_book`
+    FOREIGN KEY (possessed_book_id) REFERENCES possessed_book (possessed_book_id)
+    ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS message;
@@ -150,8 +165,12 @@ CREATE TABLE message(
    message_date DATETIME,
    PRIMARY KEY(user_id, user_id_1),
    UNIQUE(message_id),
-   FOREIGN KEY(user_id) REFERENCES user(user_id) ON DELETE CASCADE,
-   FOREIGN KEY(user_id_1) REFERENCES user(user_id) ON DELETE CASCADE
+   CONSTRAINT `fk_user`
+    FOREIGN KEY (user_id) REFERENCES user (user_id)
+    ON DELETE CASCADE,
+   CONSTRAINT `fk_user_1`
+    FOREIGN KEY (user_id_1) REFERENCES user (user_id)
+    ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS book_author;
@@ -159,8 +178,12 @@ CREATE TABLE book_author(
    book_id INT,
    author_id INT,
    PRIMARY KEY(book_id, author_id),
-   FOREIGN KEY(book_id) REFERENCES book(book_id) ON DELETE CASCADE,
-   FOREIGN KEY(author_id) REFERENCES author(author_id) ON DELETE CASCADE
+   CONSTRAINT `fk_author`
+    FOREIGN KEY (author_id) REFERENCES author (author_id)
+    ON DELETE CASCADE,
+   CONSTRAINT `fk_book`
+    FOREIGN KEY (book_id) REFERENCES book (book_id)
+    ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS book_genre;
@@ -168,8 +191,12 @@ CREATE TABLE book_genre(
    book_id INT,
    genre_id INT,
    PRIMARY KEY(book_id, genre_id),
-   FOREIGN KEY(book_id) REFERENCES book(book_id) ON DELETE CASCADE,
-   FOREIGN KEY(genre_id) REFERENCES genre(genre_id) ON DELETE CASCADE
+   CONSTRAINT `fk_book`
+    FOREIGN KEY (book_id) REFERENCES book (book_id)
+    ON DELETE CASCADE,
+   CONSTRAINT `fk_genre`
+    FOREIGN KEY (genre_id) REFERENCES genre (genre_id)
+    ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS comment;
@@ -182,8 +209,12 @@ CREATE TABLE comment(
    comment_suggestion BOOLEAN NOT NULL DEFAULT FALSE,
    PRIMARY KEY(book_id, user_id),
    UNIQUE(comment_id),
-   FOREIGN KEY(book_id) REFERENCES book(book_id) ON DELETE CASCADE,
-   FOREIGN KEY(user_id) REFERENCES user(user_id) ON DELETE CASCADE
+   CONSTRAINT `fk_book`
+    FOREIGN KEY (book_id) REFERENCES book (book_id)
+    ON DELETE CASCADE,
+   CONSTRAINT `fk_user`
+    FOREIGN KEY (user_id) REFERENCES user (user_id)
+    ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS zipcode_city;
@@ -191,8 +222,12 @@ CREATE TABLE zipcode_city(
    zipcode INT,
    city_id INT,
    PRIMARY KEY(zipcode, city_id),
-   FOREIGN KEY(zipcode) REFERENCES zipcode(zipcode) ON DELETE CASCADE,
-   FOREIGN KEY(city_id) REFERENCES city(city_id) ON DELETE CASCADE
+   CONSTRAINT `fk_zipcode`
+    FOREIGN KEY (zipcode) REFERENCES zipcode (zipcode)
+    ON DELETE CASCADE,
+   CONSTRAINT `fk_city`
+    FOREIGN KEY (city_id) REFERENCES city (city_id)
+    ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS donation;
@@ -202,8 +237,12 @@ CREATE TABLE donation(
    user_id INT NOT NULL,
    status_id INT NOT NULL,
    PRIMARY KEY(possessed_book_id),
-   FOREIGN KEY(possessed_book_id) REFERENCES possessed_book(possessed_book_id) ON DELETE CASCADE,
-   FOREIGN KEY(user_id) REFERENCES user(user_id) ON DELETE CASCADE,
+   CONSTRAINT `fk_possessed_book`
+    FOREIGN KEY (possessed_book_id) REFERENCES possessed_book (possessed_book_id)
+    ON DELETE CASCADE,
+   CONSTRAINT `fk_user`
+    FOREIGN KEY (user_id) REFERENCES user (user_id)
+    ON DELETE CASCADE,
    FOREIGN KEY(status_id) REFERENCES status(status_id)
 );
 

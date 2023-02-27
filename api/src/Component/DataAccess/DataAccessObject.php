@@ -2,21 +2,22 @@
 
 namespace Bookme\API\Component\DataAccess;
 
-use Bookme\API\Component\DataAccess\Exceptions\DatabaseError;
-use Bookme\API\Component\Database\Database;
-use Bookme\API\Component\Model\Model;
 use DateTime;
-use InvalidArgumentException;
 use PDOStatement;
 use ReflectionClass;
+use InvalidArgumentException;
+use Bookme\API\DataAccess\BookDAO;
+use Bookme\API\Component\Model\Model;
+use Bookme\API\Component\Database\Database;
+use Bookme\API\Component\DataAccess\Exceptions\DatabaseError;
 
 abstract class DataAccessObject
 {
     const MODEL_PATH = "Bookme\API\Model\\";
-    protected \PDO              $connection;
-    protected \ReflectionClass  $modelReflector;
-    protected string            $model;
-    protected string            $table;
+    protected \PDO $connection;
+    protected \ReflectionClass $modelReflector;
+    protected string $model;
+    protected string $table;
 
     public function __construct(Database $connection)
     {
@@ -259,14 +260,17 @@ abstract class DataAccessObject
             if ($columnName == "user_zip_code") $columnName = "zipcode";
             elseif ($columnName == "city_country") $columnName = "country_id";
 
-            // Make sure key exists in array
-            if (!isset($row[$columnName]) && $columnName != "user_banned") {
+            if (!isset($row[$columnName])
+                && $columnName != "user_banned"
+                && $columnName != "book_author"
+                && $columnName != "book_isbn"
+                && $columnName != "book_genre"
+            ) {
                 throw new \Exception(
                     "Failed to initialize property '{$propertyName}' of model '{$this->model}', missing column '$columnName'"
                 );
             }
 
-            // TODO: convert the column to the appropriate type if we are able to
             if ($type === "DateTime") {
                 if ($row[$columnName] != null) {
                     $property->setValue($instance, new DateTime($row[$columnName]));
@@ -276,8 +280,10 @@ abstract class DataAccessObject
                 if ($type == "Bookme\API\Model\ZipCode") $object->setZipCode($row[$columnName]);
                 else $object->setId($row[$columnName]);
                 $property->setValue($instance, $object);
+            } else if ($columnName === "book_author" || $columnName === "book_genre") {
+                continue;
             } else {
-                $property->setValue($instance, $row[$columnName]);
+                if ($row[$columnName] != null) $property->setValue($instance, $row[$columnName]);
             }
         }
         return $instance;
