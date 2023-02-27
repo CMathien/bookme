@@ -2,7 +2,7 @@
 
 namespace Bookme\API\Logic;
 
-use Bookme\API\Model\ZipCode;
+use Bookme\API\Model\Zipcode;
 use Bookme\API\DataAccess\UserDAO;
 use DateTime;
 
@@ -14,7 +14,7 @@ class UserLogic extends BaseLogic
             $value = password_hash($value, PASSWORD_DEFAULT);
         } elseif ($key === "zipCode") {
             $id = $value;
-            $value = new ZipCode();
+            $value = new Zipcode();
             $value->setZipCode($id);
         }
 
@@ -92,6 +92,24 @@ class UserLogic extends BaseLogic
                     "message" => "the email already exists"
                 ]
             );
+        }
+    }
+
+    public function checkPassword($password, $hash)
+    {
+        if (password_verify($password, $hash)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function checkBanned($banned)
+    {
+        if ($banned === 1) {
+            return false;
+        } else {
+            return true;
         }
     }
 }

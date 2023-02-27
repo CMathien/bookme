@@ -18,6 +18,7 @@ abstract class BaseController
     {
         $body = file_get_contents('php://input');
         $datas = json_decode($body, true);
+
         if (null === $datas) {
             $response = [
                 'status' => 'ERROR_BAD_JSON',

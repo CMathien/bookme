@@ -65,4 +65,17 @@ class UserDAO extends DataAccessObject
         }
         return $this->getOne($entity->{'getId'}());
     }
+
+    public function checkPassword(string $email)
+    {
+        $statement = $this->connection->prepare("select user_banned, user_password from user where user_email = :email");
+        $result = $statement->execute(['email' => $email]);
+        $row = $statement->fetch();
+
+        if (!$result) {
+            throw new DatabaseError("Database error: {$statement->errorInfo()}");
+        } else {
+            return $row;
+        }
+    }
 }

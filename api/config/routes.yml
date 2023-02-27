@@ -27,11 +27,11 @@ bookme_api:
         bookme_api_user_list_books:
           method: GET
           path: /(\d+)/books
-          action: listBooksByUsers
+          action: listUsersBooks
         bookme_api_user_password:
           method: GET
-          path: /(\d+)/
-          action: checkPassword
+          path: /login/
+          action: checkLoginInfo
         bookme_api_user_messages:
           prefix: /(\d+)/messages/
           controller: Bookme\API\Controller\MessageController
