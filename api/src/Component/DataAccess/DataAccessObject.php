@@ -66,7 +66,7 @@ abstract class DataAccessObject
     public function getMany(array $options = []): array
     {
         if (!empty($options)) {
-            $where = " where " . implode("and", $options);
+            $where = " where " . implode(" and ", $options);
         }
         $query = "select * from {$this->table}";
         if (isset($where)) $query .= $where;

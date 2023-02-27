@@ -45,4 +45,13 @@ class Author extends Model
 
         return $this;
     }
+
+    public function toArray(): array
+    {
+        return [
+            "id" => $this->getId(),
+            "first name" => $this->getFirstName(),
+            "last name" => $this->getLastName(),
+        ];
+    }
 }

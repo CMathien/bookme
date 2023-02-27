@@ -76,6 +76,30 @@ bookme_api:
           path: /(\d+)/comment/
           method: POST
           action: comment
+    bookme_api_authors:
+      prefix: /authors
+      controller: Bookme\API\Controller\AuthorController
+      routes:
+        bookme_api_authors_list:
+          path: /
+          method: GET
+          action: list
+        bookme_api_authors_get:
+          path: /(\d+)/
+          method: GET
+          action: get
+        bookme_api_authors_create:
+          path: /
+          method: POST
+          action: create
+        bookme_api_authors_update:
+          path: /(\d+)/
+          method: PATCH
+          action: update
+        bookme_api_authors_delete:
+          path: /(\d+)/
+          method: DELETE
+          action: delete
     bookme_api_genres:
       prefix: /genres
       controller: Bookme\API\Controller\GenreController

@@ -40,7 +40,7 @@ CREATE TABLE country(
 
 DROP TABLE IF EXISTS isbn;
 CREATE TABLE isbn(
-   isbn INT NOT NULL AUTO_INCREMENT,
+   isbn INT NOT NULL,
    book_id INT NOT NULL,
    PRIMARY KEY(isbn),
    FOREIGN KEY(book_id) REFERENCES book(book_id) ON DELETE CASCADE
