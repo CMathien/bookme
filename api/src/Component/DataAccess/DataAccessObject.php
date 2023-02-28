@@ -261,6 +261,9 @@ abstract class DataAccessObject
             $columnName = $this->switchCaseType($columnName);
             if ($columnName == "user_zip_code") $columnName = "zipcode";
             elseif ($columnName == "city_country") $columnName = "country_id";
+            elseif ($columnName == "donation_status") $columnName = "status_id";
+            elseif ($columnName == "donation_user") $columnName = "user_id";
+            elseif ($columnName == "donation_book_to_donate") $columnName = "possessed_book_id";
 
             if (!isset($row[$columnName])
                 && $columnName != "user_banned"

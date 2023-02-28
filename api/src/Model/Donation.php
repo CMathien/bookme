@@ -58,4 +58,19 @@ class Donation extends Model
 
         return $this;
     }
+
+    public function toArray(): array
+    {
+        if ($this->isInitialized("date")) $array['date'] = $this->getDate()->format("Y-m-d");
+        if ($this->isInitialized("status")) $array['status'] = $this->getStatus();
+        if ($this->isInitialized("bookToDonate")) $array['bookToDonate'] = $this->getBookToDonate()->getId();
+        if ($this->isInitialized("user")) $array['user'] = $this->getUser()->getId();
+        return $array;
+    }
+
+    public function isInitialized($param)
+    {
+        $rp = new \ReflectionProperty('Bookme\API\Model\Donation', $param);
+        return $rp->isInitialized($this);
+    }
 }

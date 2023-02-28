@@ -248,6 +248,10 @@ bookme_api:
           path: /
           method: POST
           action: create
+        bookme_api_donation_update:
+          path: /(\d+)/
+          method: PATCH
+          action: update        
         bookme_api_donation_delete:
           path: /(\d+)/
           method: DELETE
