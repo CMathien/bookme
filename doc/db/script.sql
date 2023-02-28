@@ -43,7 +43,7 @@ CREATE TABLE isbn(
    isbn VARCHAR(14) NOT NULL,
    book_id INT NOT NULL,
    PRIMARY KEY(isbn),
-   CONSTRAINT `fk_book`
+   CONSTRAINT `fk_isbn_book`
     FOREIGN KEY (book_id) REFERENCES book (book_id)
     ON DELETE CASCADE
 );
@@ -100,7 +100,7 @@ CREATE TABLE city(
    city_name VARCHAR(255),
    country_id INT NOT NULL,
    PRIMARY KEY(city_id),
-   CONSTRAINT `fk_country`
+   CONSTRAINT `fk_city_country`
     FOREIGN KEY (country_id) REFERENCES country (country_id)
     ON DELETE CASCADE
 );
@@ -113,14 +113,16 @@ CREATE TABLE possessed_book(
    reaction_id INT,
    reading_status_id INT,
    user_id INT NOT NULL,
+   possessed_book_to_donate BOOLEAN DEFAULT FALSE,
+   possessed_book_to_lend BOOLEAN DEFAULT FALSE,
    PRIMARY KEY(possessed_book_id),
-   CONSTRAINT `fk_book`
-    FOREIGN KEY (book_id) REFERENCES book (book_id),
+   CONSTRAINT `fk_pbook_book`
+    FOREIGN KEY (book_id) REFERENCES book (book_id)
     ON DELETE CASCADE,
    FOREIGN KEY(state_id) REFERENCES state(state_id),
    FOREIGN KEY(reaction_id) REFERENCES reaction(reaction_id),
    FOREIGN KEY(reading_status_id) REFERENCES reading_status(reading_status_id),
-   CONSTRAINT `fk_user`
+   CONSTRAINT `fk_pbook_user`
     FOREIGN KEY (user_id) REFERENCES user (user_id)
     ON DELETE CASCADE
 );
@@ -135,11 +137,11 @@ CREATE TABLE borrowing(
    user_id INT NOT NULL,
    PRIMARY KEY(possessed_book_id),
    UNIQUE(borrowing_id),
-   CONSTRAINT `fk_possessed_book`
+   CONSTRAINT `fk_borrowing_possessed_book`
     FOREIGN KEY (possessed_book_id) REFERENCES possessed_book (possessed_book_id)
     ON DELETE CASCADE,
    FOREIGN KEY(status_id) REFERENCES status(status_id),
-   CONSTRAINT `fk_user`
+   CONSTRAINT `fk_borrowing_user`
     FOREIGN KEY (user_id) REFERENCES user (user_id)
     ON DELETE CASCADE
 );
@@ -151,7 +153,7 @@ CREATE TABLE reminder(
    possessed_book_id INT NOT NULL,
    PRIMARY KEY(reminder_id),
    FOREIGN KEY(possessed_book_id) REFERENCES borrowing(possessed_book_id) ON DELETE 
-   CONSTRAINT `fk_possessed_book`
+   CONSTRAINT `fk_reminder_possessed_book`
     FOREIGN KEY (possessed_book_id) REFERENCES possessed_book (possessed_book_id)
     ON DELETE CASCADE
 );
@@ -165,10 +167,10 @@ CREATE TABLE message(
    message_date DATETIME,
    PRIMARY KEY(user_id, user_id_1),
    UNIQUE(message_id),
-   CONSTRAINT `fk_user`
+   CONSTRAINT `fk_message_user`
     FOREIGN KEY (user_id) REFERENCES user (user_id)
     ON DELETE CASCADE,
-   CONSTRAINT `fk_user_1`
+   CONSTRAINT `fk_message_user_1`
     FOREIGN KEY (user_id_1) REFERENCES user (user_id)
     ON DELETE CASCADE
 );
@@ -178,10 +180,10 @@ CREATE TABLE book_author(
    book_id INT,
    author_id INT,
    PRIMARY KEY(book_id, author_id),
-   CONSTRAINT `fk_author`
+   CONSTRAINT `fk_book_author_author`
     FOREIGN KEY (author_id) REFERENCES author (author_id)
     ON DELETE CASCADE,
-   CONSTRAINT `fk_book`
+   CONSTRAINT `fk_book_author_book`
     FOREIGN KEY (book_id) REFERENCES book (book_id)
     ON DELETE CASCADE
 );
@@ -191,10 +193,10 @@ CREATE TABLE book_genre(
    book_id INT,
    genre_id INT,
    PRIMARY KEY(book_id, genre_id),
-   CONSTRAINT `fk_book`
+   CONSTRAINT `fk_book_genre_book`
     FOREIGN KEY (book_id) REFERENCES book (book_id)
     ON DELETE CASCADE,
-   CONSTRAINT `fk_genre`
+   CONSTRAINT `fk_book_genre_genre`
     FOREIGN KEY (genre_id) REFERENCES genre (genre_id)
     ON DELETE CASCADE
 );
@@ -209,10 +211,10 @@ CREATE TABLE comment(
    comment_suggestion BOOLEAN NOT NULL DEFAULT FALSE,
    PRIMARY KEY(book_id, user_id),
    UNIQUE(comment_id),
-   CONSTRAINT `fk_book`
+   CONSTRAINT `fk_comment_book`
     FOREIGN KEY (book_id) REFERENCES book (book_id)
     ON DELETE CASCADE,
-   CONSTRAINT `fk_user`
+   CONSTRAINT `fk_comment_user`
     FOREIGN KEY (user_id) REFERENCES user (user_id)
     ON DELETE CASCADE
 );
@@ -222,10 +224,10 @@ CREATE TABLE zipcode_city(
    zipcode INT,
    city_id INT,
    PRIMARY KEY(zipcode, city_id),
-   CONSTRAINT `fk_zipcode`
+   CONSTRAINT `fk_zipcode_city_zipcode`
     FOREIGN KEY (zipcode) REFERENCES zipcode (zipcode)
     ON DELETE CASCADE,
-   CONSTRAINT `fk_city`
+   CONSTRAINT `fk_zipcode_city_city`
     FOREIGN KEY (city_id) REFERENCES city (city_id)
     ON DELETE CASCADE
 );
@@ -237,10 +239,10 @@ CREATE TABLE donation(
    user_id INT NOT NULL,
    status_id INT NOT NULL,
    PRIMARY KEY(possessed_book_id),
-   CONSTRAINT `fk_possessed_book`
+   CONSTRAINT `fk_donation_possessed_book`
     FOREIGN KEY (possessed_book_id) REFERENCES possessed_book (possessed_book_id)
     ON DELETE CASCADE,
-   CONSTRAINT `fk_user`
+   CONSTRAINT `fk_donation_user`
     FOREIGN KEY (user_id) REFERENCES user (user_id)
     ON DELETE CASCADE,
    FOREIGN KEY(status_id) REFERENCES status(status_id)

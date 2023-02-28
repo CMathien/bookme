@@ -1,0 +1,1 @@
+INSERT IGNORE INTO status (status_label) VALUES ("Libre"), ("Réservé"), ("Emprunté"), ("En retard");

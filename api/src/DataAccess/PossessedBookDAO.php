@@ -7,20 +7,13 @@ use Bookme\API\Model\Author;
 use Bookme\API\Model\PossessedBook;
 use Bookme\API\Component\DataAccess\Exceptions\DatabaseError;
 use Bookme\API\Component\Model\Model;
+use Bookme\API\Model\BookToDonate;
 
 class PossessedBookDAO extends BookDAO
 {
     protected function prepareQuery(string $columns, string $placeholders, array $params): array
     {
-        $columns = explode(",", $columns);
-        $clean = [];
-        foreach ($columns as $column) {
-            $column = str_replace("possessed_book_", "", $column);
-            $column .= "_id";
-            $clean[] = $column;
-        }
-        $columns = implode(",", $clean);
-        $colums = $this->cleanColumns($columns);
+        $columns = $this->cleanColumns($columns);
         $statement = $this->connection->prepare("insert into {$this->table} ($columns) values ($placeholders)");
         $result = $statement->execute($params);
 
@@ -41,7 +34,9 @@ class PossessedBookDAO extends BookDAO
         $instances = [];
         if (count($rows) > 0) {
             foreach ($rows as $row) {
-                $instance = new $this->model();
+                if (isset($row["possessed_book_to_donate"]) && $row["possessed_book_to_donate"] === 1) {
+                    $instance = new BookToDonate();
+                } else $instance = new $this->model();
 
                 $this->hydrateModel($instance, $row);
                 $authors = $this->getAuthors($instance->getBook());
@@ -78,7 +73,10 @@ class PossessedBookDAO extends BookDAO
             throw new DatabaseError("Database error: {$statement->errorInfo()}");
         } else {
             if ($row) {
-                $instance = $this->modelReflector->newInstance();
+                if (isset($row["possessed_book_to_donate"]) && $row["possessed_book_to_donate"] === 1) {
+                    $bookToDonate = new \ReflectionClass("Bookme\API\Model\BookToDonate");
+                    $instance = $bookToDonate->newInstance();
+                } else $instance = $this->modelReflector->newInstance();
                 $this->hydrateModel($instance, $row);
                 $authors = $this->getAuthors($instance->getBook());
                 foreach ($authors as $author) {
@@ -142,7 +140,7 @@ class PossessedBookDAO extends BookDAO
         return $this->getOne($entity->{'getId'}());
     }
 
-    private function cleanColumns($columns, $update = 0)
+    protected function cleanColumns($columns, $update = 0)
     {
         $columns = explode(",", $columns);
         $clean = [];

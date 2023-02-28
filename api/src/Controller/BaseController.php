@@ -91,6 +91,7 @@ abstract class BaseController
 
         if (isset($datas["banned"]) && $datas["banned"] != null) $className = "BannedUser";
         elseif (isset($datas["admin"]) && $datas["admin"] == 1) $className = "Admin";
+        elseif (isset($datas["toDonate"]) && $datas["toDonate"] == 1) $className = "BookToDonate";
         else $className = $this->getClassName();
         $classDAO = "Bookme\API\DataAccess\\" . $className . "DAO";
         $classLogic = "Bookme\API\Logic\\" . $className . "Logic";
@@ -131,6 +132,7 @@ abstract class BaseController
         
         if (isset($datas["banned"]) && $datas["banned"] != null) $className = "BannedUser";
         elseif (isset($datas["admin"]) && $datas["admin"] == 1) $className = "Admin";
+        elseif (isset($datas["toDonate"]) && $datas["toDonate"] == 1) $className = "BookToDonate";
         else $className = $this->getClassName();
         $classDAO = "Bookme\API\DataAccess\\" . $className . "DAO";
         $classLogic = "Bookme\API\Logic\\" . $className . "Logic";

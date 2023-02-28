@@ -104,6 +104,9 @@ class PossessedBook extends Book
                 $array['genre'][] = $genre->toArray();
             }
         }
+        $array['toDonate'] = false;
+        $array['toLend'] = false;
+
         return $array;
     }
 

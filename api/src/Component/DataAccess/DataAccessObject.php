@@ -28,6 +28,7 @@ abstract class DataAccessObject
         if ($this->table === "admin") $this->table = "user";
         elseif ($this->table === "banneduser") $this->table = "user";
         elseif ($this->table === "possessedbook") $this->table = "possessed_book";
+        elseif ($this->table === "booktodonate") $this->table = "possessed_book";
         $this->connection = $connection;
         $this->modelReflector = new \ReflectionClass($this->model);
     }
