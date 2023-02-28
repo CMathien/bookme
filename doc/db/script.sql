@@ -160,18 +160,17 @@ CREATE TABLE reminder(
 
 DROP TABLE IF EXISTS message;
 CREATE TABLE message(
-   user_id INT,
-   user_id_1 INT,
+   message_sender INT,
+   message_recipient INT,
    message_id INT NOT NULL AUTO_INCREMENT,
    message_content TEXT NOT NULL,
-   message_date DATETIME,
-   PRIMARY KEY(user_id, user_id_1),
-   UNIQUE(message_id),
-   CONSTRAINT `fk_message_user`
-    FOREIGN KEY (user_id) REFERENCES user (user_id)
+   message_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+   PRIMARY KEY(message_id),
+   CONSTRAINT `fk_message_sender`
+    FOREIGN KEY (message_sender) REFERENCES user (user_id)
     ON DELETE CASCADE,
-   CONSTRAINT `fk_message_user_1`
-    FOREIGN KEY (user_id_1) REFERENCES user (user_id)
+   CONSTRAINT `fk_message_recipient`
+    FOREIGN KEY (message_recipient) REFERENCES user (user_id)
     ON DELETE CASCADE
 );
 

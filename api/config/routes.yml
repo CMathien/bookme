@@ -256,4 +256,24 @@ bookme_api:
           path: /(\d+)/
           method: DELETE
           action: delete
+    bookme_api_messages:
+      prefix: /messages
+      controller: Bookme\API\Controller\MessageController
+      routes:
+        bookme_api_messages_list_from_to_user:
+          path: /(\d+)/
+          method: GET
+          action: listAllUserMessages
+        bookme_api_messages_list_between_two_users:
+          path: /(\d+)/(\d+)/
+          method: GET
+          action: listUsersMessagesWithSpecificUser
+        bookme_api_messages_get:
+          path: /(\d+)/
+          method: GET
+          action: get
+        bookme_api_messages_create:
+          path: /
+          method: POST
+          action: create
     
