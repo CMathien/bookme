@@ -27,6 +27,7 @@ abstract class DataAccessObject
         $this->table = strtolower($explodedClassName);
         if ($this->table === "admin") $this->table = "user";
         elseif ($this->table === "banneduser") $this->table = "user";
+        elseif ($this->table === "possessedbook") $this->table = "possessed_book";
         $this->connection = $connection;
         $this->modelReflector = new \ReflectionClass($this->model);
     }
@@ -265,6 +266,10 @@ abstract class DataAccessObject
                 && $columnName != "book_author"
                 && $columnName != "book_isbn"
                 && $columnName != "book_genre"
+                && $columnName != "possessed_book_author"
+                && $columnName != "possessed_book_isbn"
+                && $columnName != "possessed_book_genre"
+                && $columnName != "possessed_book_reaction"
             ) {
                 throw new \Exception(
                     "Failed to initialize property '{$propertyName}' of model '{$this->model}', missing column '$columnName'"
@@ -280,7 +285,11 @@ abstract class DataAccessObject
                 if ($type == "Bookme\API\Model\ZipCode") $object->setZipCode($row[$columnName]);
                 else $object->setId($row[$columnName]);
                 $property->setValue($instance, $object);
-            } else if ($columnName === "book_author" || $columnName === "book_genre") {
+            } else if ($columnName === "book_author"
+                || $columnName === "book_genre"
+                || $columnName === "possessed_book_author"
+                || $columnName === "possessed_book_genre"
+            ) {
                 continue;
             } else {
                 if ($row[$columnName] != null) $property->setValue($instance, $row[$columnName]);

@@ -35,9 +35,13 @@ class Genre extends Model
 
     public function toArray(): array
     {
-        return [
-            "id" => $this->getId(),
-            "label" => $this->getLabel(),
-        ];
+        if ($this->isInitialized("id")) $array['id'] = $this->getId();
+        if ($this->isInitialized("label")) $array['label'] = $this->getLabel();
+        return $array;
+    }
+    public function isInitialized($param)
+    {
+        $rp = new \ReflectionProperty('Bookme\API\Model\Genre', $param);
+        return $rp->isInitialized($this);
     }
 }

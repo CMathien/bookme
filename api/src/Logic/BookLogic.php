@@ -2,6 +2,7 @@
 
 namespace Bookme\API\Logic;
 
+use Bookme\API\Model\User;
 use Bookme\API\Model\Genre;
 use Bookme\API\Model\Author;
 use Bookme\API\DataAccess\BookDAO;
