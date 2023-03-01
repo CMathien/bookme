@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+    <php>
+        <env name="PDO_DSN" value="" force="true"/>
+        <env name="PDO_USER" value="" force="true"/>
+        <env name="PDO_PASSWORD" value="" force="true"/>
+        <env name="APIKEY" value="" force="true"/>
+    </php>
+</phpunit>

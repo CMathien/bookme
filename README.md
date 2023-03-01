@@ -28,3 +28,7 @@ Book management app
 
 ## Commit
 - Use the bash terminal in the container `docker exec -it bookme-php-1 sh` and commit in it `git commit -m "replace with your message"`
+
+## Unit tests on API
+-Install test database `doc\db\script_test_db.sql` and install your api key in api_key table
+-Run `docker exec -i -w /bookme/api bookme-php-1 php vendor/bin/phpunit tests --verbose`
