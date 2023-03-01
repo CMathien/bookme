@@ -22,6 +22,7 @@
         <exclude name="PEAR.NamingConventions.ValidVariableName.PrivateNoUnderscore" />
         <exclude name="PEAR.NamingConventions.ValidFunctionName.PrivateNoUnderscore" />
         <exclude name="PSR12.ControlStructures.ControlStructureSpacing.FirstExpressionLine" />
+        <exclude name="PHPCS_SecurityAudit.Misc.IncludeMismatch.ErrMiscIncludeMismatchNoExt" />
     </rule>
 
     <rule ref="Generic.Files.LineLength">

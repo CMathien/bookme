@@ -1,0 +1,12 @@
+bookme_admin:
+  routes:
+    bookme_home:
+      path: /
+      controller: Bookme\Admin\Controller\HomeController
+      method: GET
+      action: display
+    bookme_login:
+      path: /login
+      controller: Bookme\Admin\Controller\LoginController
+      method: GET
+      action: display
