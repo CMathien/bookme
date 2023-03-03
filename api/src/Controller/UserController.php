@@ -67,6 +67,8 @@ class UserController extends BaseController
                 $this->sendResponse($response, 404);
             }
             $response = [
+                'id' => $data["user_id"],
+                'admin' => $data["user_admin"],
                 'status' => 'AUTHORIZED LOGIN',
             ];
             $this->sendResponse($response, 200);

@@ -29,7 +29,7 @@ bookme_api:
           path: /(\d+)/books
           action: listUsersBooks
         bookme_api_user_password:
-          method: GET
+          method: POST
           path: /login/
           action: checkLoginInfo
         bookme_api_user_messages:

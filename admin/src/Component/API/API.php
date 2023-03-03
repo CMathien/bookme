@@ -4,6 +4,27 @@ namespace Bookme\Admin\Component\API;
 
 class API
 {
+    public function callAPILogin($data)
+    {
+        $curl = curl_init('https://api.bookme.local.com/users/login/');
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HEADER, false);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, ['apikey: ' . getenv("APIKEY")]);
+        curl_setopt($curl, CURLOPT_POST, true);
+       
+        $dataJson = json_encode($data);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $dataJson);
+        $output = curl_exec($curl);
+        if ($output === false) {
+            trigger_error('Erreur curl : ' . curl_error($curl), E_USER_WARNING);
+        } else {
+            return $output;
+        }
+        curl_close($curl);
+    }
+
     public function callAPIGet($entity)
     {
         $curl = curl_init('https://api.bookme.local.com/' . $entity);

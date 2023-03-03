@@ -2,52 +2,52 @@
 
 namespace Bookme\Admin\Controller;
 
+use Bookme\Admin\Component\API\API;
 use Bookme\Admin\Controller\BaseController;
+use Bookme\Admin\Component\Security\Security;
 
 class LoginController extends BaseController
 {
-    public function display()
+    public function display($unauthorized = 0)
     {
-        include_once "../View/" . $this->className . "View.php";
+        if (Security::checkAdmin()) {
+            header('location:home');
+            exit;
+        } else {
+            include_once "../View/" . $this->className . "View.php";
+        }
     }
 
-    public function login()
+    public function logIn()
     {
-        //verifier que l'utilisateur est connecté
-        //verfifier isadmin = true
-        //aller dans l'api et voir si useremail existe
-        $data = new API();
-        $dataApiUser = $data->callAPIGet('users');
-    }
-
-    public function traitement()
-    {
-        //aller dans l'api et voir si useremail existe
-        $data = new API();
-        $dataApiUser = $data->callAPIGet('users');
-        $dataApiUser = (json_decode($dataApiUser));
-        $emailAPI = $dataApiUser->data[0]->email;
-        $pwAPI = $dataApiUser->data[0]->password;
-        $isAdminAPI = $dataApiUser->data[0]->isAdmin;
-        //recupére les données du post
-        if (isset($_POST) && $_POST != null) {
+        unset($_SESSION['admin']);
+        if (isset($_POST["email"]) && isset($_POST["password"])) {
             $email = htmlentities($_POST['email']);
-            $pw = htmlentities($_POST['password']);
-            //si le mail est ok si le pw est ok et si l'user est admin
-            if ($email == $emailAPI && $pwAPI && $isAdminAPI == true) {
-                $_SESSION['access'] = 'admin';
-                // var_dump($_SESSION);
-                header('location:accueil');
-            } else {
-                //gérer le cas
-                echo 'pas le droit';
+            $password = htmlentities($_POST['password']);
+            if ($email != "" && $password != "") {
+                $data = [
+                    "email" => $email,
+                    "password" => $password,
+                ];
+                $api = new API();
+                $result = $api->callAPILogin($data);
+
+                $result = json_decode($result, true);
+                if (isset($result["admin"]) && $result["admin"] == 1) {
+                    $_SESSION['admin'] = "admin";
+                    header("location:home");
+                    exit;
+                } else {
+                    $this->display(1);
+                }
             }
         }
     }
 
     public function logOut()
     {
-        unset($_SESSION['access']);
+        unset($_SESSION['admin']);
         header('location:login');
+        exit;
     }
 }

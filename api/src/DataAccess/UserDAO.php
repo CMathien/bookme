@@ -68,7 +68,8 @@ class UserDAO extends DataAccessObject
 
     public function checkPassword(string $email)
     {
-        $statement = $this->connection->prepare("select user_banned, user_password from user where user_email = :email");
+        $statement = $this->connection
+            ->prepare("select user_id, user_banned, user_admin, user_password from user where user_email = :email");
         $result = $statement->execute(['email' => $email]);
         $row = $statement->fetch();
 

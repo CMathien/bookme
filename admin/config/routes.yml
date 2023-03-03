@@ -5,8 +5,37 @@ bookme_admin:
       controller: Bookme\Admin\Controller\HomeController
       method: GET
       action: display
-    bookme_login:
-      path: /login
-      controller: Bookme\Admin\Controller\LoginController
+    bookme_home_redirect:
+      path: /home
+      controller: Bookme\Admin\Controller\HomeController
       method: GET
       action: display
+    bookme_admin_login:
+      prefix: /login
+      controller: Bookme\Admin\Controller\LoginController
+      routes:
+        bookme_admin_login_get:
+          path: /
+          method: GET
+          action: display
+        bookme_admin_login_post:
+          path: /
+          method: POST
+          action: logIn
+    bookme_admin_logout:
+      path: /logout
+      controller: Bookme\Admin\Controller\LoginController
+      method: GET
+      action: logOut
+    astromnia_admin_login:
+      prefix: /login
+      controller: Astromnia\Admin\Controller\LoginAdminController
+      routes:
+        astromnia_admin_login_get:
+          path: /
+          method: GET
+          action: visualisation
+        astromnia_admin_login_post:
+          path: /
+          method: POST
+          action: traitement

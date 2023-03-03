@@ -20,6 +20,7 @@ abstract class BaseController
             include_once "../View/" . $this->className . "View.php";
         } else {
             header('location:login');
+            exit;
         }
     }
 }

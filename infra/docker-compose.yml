@@ -22,6 +22,11 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    networks:
+          default:
+            aliases:
+              - api.bookme.local.com
+              - admin.bookme.local.com
 
   php:
     build: ./php
