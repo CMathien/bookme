@@ -8,6 +8,11 @@ class Zipcode extends Model
 {
     private string $zipcode;
 
+    public function __toString()
+    {
+        return $this->getZipcode();
+    }
+
     public function getZipcode()
     {
         return $this->zipcode;

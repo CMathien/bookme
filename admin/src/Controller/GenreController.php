@@ -4,11 +4,15 @@ namespace Bookme\Admin\Controller;
 
 use Bookme\Admin\Controller\BaseController;
 
-class HomeController extends BaseController
+class GenreController extends BaseController
 {
     public function __construct()
     {
-        $this->title = "Tableau de bord";
+        $this->title = "Genres";
+        $this->columns = [
+            "ID",
+            "Label"
+        ];
         parent::__construct();
     }
 }

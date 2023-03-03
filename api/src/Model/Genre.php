@@ -9,6 +9,11 @@ class Genre extends Model
     private int $id;
     private string $label;
 
+    public function __toString()
+    {
+        return $this->getLabel();
+    }
+
     public function getId()
     {
         return $this->id;

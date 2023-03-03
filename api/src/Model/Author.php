@@ -10,6 +10,13 @@ class Author extends Model
     private string $firstName;
     private string $lastName;
 
+    public function __toString()
+    {
+        $firstName = ucfirst($this->getFirstName());
+        $lastName = strtoupper($this->getLastName());
+        return $firstName . " " . $lastName;
+    }
+
     public function getId()
     {
         return $this->id;

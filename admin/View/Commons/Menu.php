@@ -2,39 +2,33 @@
     <div class="position-sticky pt-3 sidebar-sticky">
         <ul class="nav flex-column">
             <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">
-                <span data-feather="home" class="align-text-bottom"></span>
-                Dashboard
+            <a class="nav-link <?php if ($this->className === "Home") echo "active" ?>" aria-current="page" href="home">
+                Tableau de bord
             </a>
             </li>
             <li class="nav-item">
-            <a class="nav-link" href="#">
-                <span data-feather="file" class="align-text-bottom"></span>
-                Orders
+            <a class="nav-link <?php if ($this->className === "User") echo "active" ?>" href="users">
+                Utilisateurs
             </a>
             </li>
             <li class="nav-item">
-            <a class="nav-link" href="#">
-                <span data-feather="shopping-cart" class="align-text-bottom"></span>
-                Products
+            <a class="nav-link <?php if ($this->className === "Book") echo "active" ?>" href="books">
+                Livres
             </a>
             </li>
             <li class="nav-item">
-            <a class="nav-link" href="#">
-                <span data-feather="users" class="align-text-bottom"></span>
-                Customers
+            <a class="nav-link <?php if ($this->className === "Genre") echo "active" ?>" href="genres">
+                Genres
             </a>
             </li>
             <li class="nav-item">
-            <a class="nav-link" href="#">
-                <span data-feather="bar-chart-2" class="align-text-bottom"></span>
-                Reports
+            <a class="nav-link <?php if ($this->className === "Author") echo "active" ?>" href="authors">
+                Auteurs
             </a>
             </li>
             <li class="nav-item">
-            <a class="nav-link" href="#">
-                <span data-feather="layers" class="align-text-bottom"></span>
-                Integrations
+            <a class="nav-link <?php if ($this->className === "Donation") echo "active" ?>" href="donations">
+                Dons
             </a>
             </li>
         </ul>

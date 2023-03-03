@@ -134,4 +134,12 @@ input[type="color"]:focus,
 
   h1.h2, h1.h3, .navbar-brand {
     font-family: 'Radley', 'Times New Roman', Times, serif;
-  }
+}
+
+.red {
+    color: red;
+}
+
+.green {
+    color: green;
+}

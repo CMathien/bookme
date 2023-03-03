@@ -22,7 +22,5 @@
 </div>
 <?php
 $content = ob_get_clean();
-$logged = false;
-$title = "Se connecter";
 require "Commons/Template.php";
 

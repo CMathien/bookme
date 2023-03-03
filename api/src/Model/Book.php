@@ -14,6 +14,11 @@ class Book extends Model
     protected array $author;
     protected array $genre;
 
+    public function __toString()
+    {
+        return $this->title;
+    }
+
     public function getId()
     {
         return $this->id;

@@ -27,15 +27,51 @@ bookme_admin:
       controller: Bookme\Admin\Controller\LoginController
       method: GET
       action: logOut
-    astromnia_admin_login:
-      prefix: /login
-      controller: Astromnia\Admin\Controller\LoginAdminController
+    bookme_admin_users:
+      prefix: /users
+      controller: Bookme\Admin\Controller\UserController
       routes:
-        astromnia_admin_login_get:
+        bookme_admin_users_list:
           path: /
           method: GET
-          action: visualisation
-        astromnia_admin_login_post:
+          action: list
+        bookme_admin_users_getOne:
+          path: /(\d+)/
+          method: GET
+          action: getOne
+    bookme_admin_books:
+      prefix: /books
+      controller: Bookme\Admin\Controller\BookController
+      routes:
+        bookme_admin_books_list:
           path: /
-          method: POST
-          action: traitement
+          method: GET
+          action: list
+        bookme_admin_books_getOne:
+          path: /(\d+)/
+          method: GET
+          action: getOne
+    bookme_admin_genres:
+      prefix: /genres
+      controller: Bookme\Admin\Controller\GenreController
+      routes:
+        bookme_admin_genres_list:
+          path: /
+          method: GET
+          action: list
+    authors:
+      prefix: /authors
+      controller: Bookme\Admin\Controller\AuthorController
+      routes:
+        bookme_admin_authors_list:
+          path: /
+          method: GET
+          action: list
+    bookme_admin_donations:
+      prefix: /donations
+      controller: Bookme\Admin\Controller\DonationController
+      routes:
+        bookme_admin_donations_list:
+          path: /
+          method: GET
+          action: list

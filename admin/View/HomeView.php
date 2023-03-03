@@ -4,6 +4,4 @@
 </main>
 <?php
 $content = ob_get_clean();
-$logged = true;
-$title = "Tableau de bord";
 require "Commons/Template.php";

@@ -8,12 +8,19 @@ use Bookme\Admin\Component\Security\Security;
 
 class LoginController extends BaseController
 {
+    public function __construct()
+    {
+        $this->title = "Se connecter";
+        parent::__construct();
+    }
     public function display($unauthorized = 0)
     {
         if (Security::checkAdmin()) {
             header('location:home');
             exit;
         } else {
+            $logged = false;
+
             include_once "../View/" . $this->className . "View.php";
         }
     }
@@ -30,7 +37,7 @@ class LoginController extends BaseController
                     "password" => $password,
                 ];
                 $api = new API();
-                $result = $api->callAPILogin($data);
+                $result = $api->login($data);
 
                 $result = json_decode($result, true);
                 if (isset($result["admin"]) && $result["admin"] == 1) {

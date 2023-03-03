@@ -4,7 +4,7 @@ namespace Bookme\Admin\Component\API;
 
 class API
 {
-    public function callAPILogin($data)
+    public function login($data)
     {
         $curl = curl_init('https://api.bookme.local.com/users/login/');
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
@@ -25,11 +25,13 @@ class API
         curl_close($curl);
     }
 
-    public function callAPIGet($entity)
+    public function list($entity)
     {
+        $entity = strtolower($entity) . "s";
         $curl = curl_init('https://api.bookme.local.com/' . $entity);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, ['apikey: ' . getenv("APIKEY")]);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         $data = curl_exec($curl);
         if ($data === false) {
@@ -39,12 +41,14 @@ class API
         return $data;
     }
 
-    public function callAPIGetById($entity, $id)
+    public function getOne($entity, $id)
     {
+        $entity = strtolower($entity) . "s";
         $curl = curl_init('https://api.bookme.local.com/' . $entity . '/' . $id);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, ['apikey: ' . getenv("APIKEY")]);
         $data = curl_exec($curl);
         if ($data === false) {
             var_dump(curl_error($curl));
@@ -53,13 +57,14 @@ class API
         return $data;
     }
 
-    public function callAPIPost($data, $entity)
+    public function post($data, $entity)
     {
         $curl = curl_init('https://api.bookme.local.com/' . $entity);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_HEADER, false);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, ['apikey: ' . getenv("APIKEY")]);
         curl_setopt($curl, CURLOPT_POST, true);
         // var_dump($curl);
         

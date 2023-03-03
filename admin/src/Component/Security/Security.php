@@ -6,6 +6,6 @@ class Security
 {
     public static function checkAdmin()
     {
-        return(!empty($_SESSION['admin']) && $_SESSION['admin'] === "admin");
+        return (isset($_SESSION['admin']) && $_SESSION['admin'] === "admin");
     }
 }

@@ -15,6 +15,11 @@ class User extends Model
     protected int $balance;
     protected ZipCode $zipCode;
 
+    public function __toString()
+    {
+        return $this->getPseudo();
+    }
+
     public function getId()
     {
         return $this->id;
@@ -117,8 +122,10 @@ class User extends Model
         if ($this->isInitialized("pseudo")) $array['pseudo'] = $this->getPseudo();
         if ($this->isInitialized("email")) $array['email'] = $this->getEmail();
         if ($this->isInitialized("publicComments")) $array['publicComments'] = $this->getPublicComments();
+        else $array['publicComments'] = null;
         if ($this->isInitialized("avatar")) $array['avatar'] = $this->getAvatar();
         if ($this->isInitialized("balance")) $array['balance'] = $this->getBalance();
+        else $array['balance'] = null;
         if ($this->isInitialized("zipCode")) $array['zipcode'] = ["zipcode" => $this->getZipCode()->getZipCode()];
         $array['admin'] = 0;
         $array['banned'] = null;
