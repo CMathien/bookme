@@ -1,6 +1,7 @@
-<?php ob_start(); ?>
+<?php ob_start();?>
 
 Hello accueil
+
 <?php
 $content = ob_get_clean();
 $titre = 'Accueil';
