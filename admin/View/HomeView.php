@@ -1,9 +1,9 @@
 <?php ob_start();?>
-
-Hello accueil
-
+<main class="px-3 text-center">
+    <img class="mb-4 img-thumbnail" src="public/img/bookme-logo.png">
+</main>
 <?php
 $content = ob_get_clean();
-$titre = 'Accueil';
 $logged = true;
+$title = "Tableau de bord";
 require "Commons/Template.php";
