@@ -17,4 +17,23 @@ class GenreController extends BaseController
         ];
         parent::__construct();
     }
+
+    public function new()
+    {
+        if (isset($_POST["label"])) {
+            $label = htmlentities($_POST['label']);
+            if ($label != "") {
+                $data = [
+                    "label" => $label,
+                ];
+                $this->post($data);
+            } else {
+                header('location:/' . $this->route);
+                exit;
+            }
+        } else {
+            header('location:/' . $this->route);
+            exit;
+        }
+    }
 }

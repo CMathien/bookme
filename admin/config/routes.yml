@@ -75,6 +75,14 @@ bookme_admin:
           path: /(\d+)/delete
           method: get
           action: delete
+        bookme_admin_genres_post:
+          path: /new
+          method: post
+          action: new
+        bookme_admin_genres_newview:
+          path: /new
+          method: get
+          action: displayNew
     authors:
       prefix: /authors
       controller: Bookme\Admin\Controller\AuthorController

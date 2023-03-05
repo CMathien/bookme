@@ -1,4 +1,10 @@
-<?php ob_start();?>
+<?php
+ 
+ob_start();
+if ($this->className === "Genre") {
+    echo "<div class='row text-end'><a href='/genres/new'><span class='btn btn-primary'>+ Genre</span></a></div>";
+}
+?>
 
 <div class="table-responsive">
     <table class="table table-striped table-sm">

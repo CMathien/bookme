@@ -31,6 +31,18 @@ abstract class BaseController
         }
     }
 
+    public function displayNew()
+    {
+        if (Security::checkAdmin()) {
+            $entity = $this->className;
+            $logged = true;
+            include_once "../View/NewView.php";
+        } else {
+            header('location:login');
+            exit;
+        }
+    }
+
     public function list()
     {
         if (Security::checkAdmin()) {
@@ -148,11 +160,11 @@ abstract class BaseController
         }
     }
 
-    public function post()
+    public function post(array $data)
     {
         if (Security::checkAdmin()) {
             $api = new Api();
-            $result = $api->delete($this->route, $id);
+            $result = $api->post($data, $this->route);
             $result = json_decode($result, true);
             $logged = true;
             header('location:/' . $this->route);
