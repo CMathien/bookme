@@ -16,7 +16,7 @@ if (isset($entities) && !empty($entities)) {
     }
     echo "<td></td>";
     echo "</tr></thead>";
-    echo "<tbody>";
+
     foreach ($entities as $entity) {
         echo "<tr>";
         $id = $entity[0];
@@ -47,10 +47,19 @@ if (isset($entities) && !empty($entities)) {
             echo "<td>$value</td>";
         }
 
-        echo "<td align=right><a href='" . $this->route . "/$id/delete' class='btn btn-primary'>Supprimer</a></td>";
+        echo "<td align=right>
+                <a href='" . $this->route . "/$id/delete'>
+                    <div class='icon-trash'>
+                        <div class='trash-lid' style='background-color: red'></div>
+                        <div class='trash-container' style='background-color: red'></div>
+                        <div class='trash-line-1'></div>
+                        <div class='trash-line-2'></div>
+                        <div class='trash-line-3'></div>
+                    </div>
+                </a>
+            </td>";
 
         echo "</tr>";
-        echo "</tbody>";
     }
 } else {
     echo "Aucun résultat";
