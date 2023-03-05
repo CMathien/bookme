@@ -147,4 +147,19 @@ abstract class BaseController
             exit;
         }
     }
+
+    public function post()
+    {
+        if (Security::checkAdmin()) {
+            $api = new Api();
+            $result = $api->delete($this->route, $id);
+            $result = json_decode($result, true);
+            $logged = true;
+            header('location:/' . $this->route);
+            exit;
+        } else {
+            header('location:login');
+            exit;
+        }
+    }
 }

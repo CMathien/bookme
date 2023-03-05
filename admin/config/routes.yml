@@ -43,6 +43,10 @@ bookme_admin:
           path: /(\d+)/ban
           method: GET
           action: ban
+        bookme_admin_users_delete:
+          path: /(\d+)/delete
+          method: get
+          action: delete
     bookme_admin_books:
       prefix: /books
       controller: Bookme\Admin\Controller\BookController
@@ -55,6 +59,10 @@ bookme_admin:
           path: /(\d+)/
           method: GET
           action: getOne
+        bookme_admin_books_delete:
+          path: /(\d+)/delete
+          method: get
+          action: delete
     bookme_admin_genres:
       prefix: /genres
       controller: Bookme\Admin\Controller\GenreController
@@ -75,6 +83,10 @@ bookme_admin:
           path: /
           method: GET
           action: list
+        bookme_admin_authors_delete:
+          path: /(\d+)/delete
+          method: get
+          action: delete
     bookme_admin_donations:
       prefix: /donations
       controller: Bookme\Admin\Controller\DonationController
@@ -83,3 +95,7 @@ bookme_admin:
           path: /
           method: GET
           action: list
+        bookme_admin_donations_delete:
+          path: /(\d+)/delete
+          method: get
+          action: delete
