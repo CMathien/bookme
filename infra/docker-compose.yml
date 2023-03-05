@@ -35,3 +35,11 @@ services:
     volumes:
       - "./php/custom-conf.ini:/usr.local.etc/php-fpm.d/99-custom.ini"
       - "../:/bookme"
+  app:
+    build: ./ionic
+    tty: true
+    ports:
+      - "8100:8100"
+      - "35729:35729"
+    volumes:
+      - "../:/bookme"

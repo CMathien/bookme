@@ -32,3 +32,6 @@ Book management app
 ## Unit tests on API
 -Install test database `doc\db\script_test_db.sql` and install your api key in api_key table
 -Run `docker exec -i -w /bookme/api bookme-php-1 php vendor/bin/phpunit tests --verbose`
+
+## Ionic
+- Run `docker exec -it bookme-app-1 ionic serve --external --public-host=app.bookme.local.com --no-open --ssl`
