@@ -39,6 +39,10 @@ bookme_admin:
           path: /(\d+)/
           method: GET
           action: getOne
+        bookme_admin_users_ban:
+          path: /(\d+)/ban
+          method: GET
+          action: ban
     bookme_admin_books:
       prefix: /books
       controller: Bookme\Admin\Controller\BookController

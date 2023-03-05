@@ -105,6 +105,9 @@ abstract class BaseController
                             $genres[] = $new["label"];
                         }
                         $row[] = $genres;
+                    } elseif ($key == "banned") {
+                        $date = new \DateTime($property["date"]);
+                        $row[] = $date->format("d/m/Y");
                     }
                 }
             }

@@ -8,19 +8,23 @@ if (isset($entities) && !empty($entities)) {
     foreach ($this->columns as $column) {
         echo "<td>" . ucfirst($column) . "</td>";
     }
+
     echo "</tr></thead>";
     echo "<tbody>";
     foreach ($entities as $entity) {
         echo "<tr>";
+        $id = $entity[0];
         foreach ($entity as $k => $property) {
             if (!is_array($property)) {
                 if ($k > 0) {
-                    if ($property === false || $property === 0) {
+                    if (($this->className === "User" && $k === 3 && $property === null) || $property === false || $property === 0) {
                         $value = "<div class='red text-center'>&cross;</div>";
                     } elseif ($property === true || $property === 1) {
                         $value = "<div class='green text-center'>&check;</div>";
                     } elseif ($property === null || $property === "null") {
-                        $value = "";
+                        if ($this->className === "User" && $k === 8) {
+                            $value = "<a href='users/$id/ban' class='btn btn-primary'>Bannir</a>";
+                        } else $value = "";
                     } else {
                         $value = $property;
                     }

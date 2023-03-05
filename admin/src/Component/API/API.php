@@ -59,6 +59,7 @@ class API
 
     public function post($data, $entity)
     {
+        $entity = strtolower($entity) . "s";
         $curl = curl_init('https://api.bookme.local.com/' . $entity);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
@@ -79,17 +80,26 @@ class API
         curl_close($curl);
     }
 
-    public function callAPIPatch($data, $entity, $id)
+    public function patch($data, $entity, $id)
     {
+        $entity = strtolower($entity) . "s";
         $data_json = json_encode($data);
         $url = 'https://api.bookme.local.com/' . $entity . '/' . $id ;
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Content-Length: ' . strlen($data_json)));
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data_json);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $response  = curl_exec($ch);
-        curl_close($ch);
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Content-Length: ' . strlen($data_json)));
+        curl_setopt($curl, CURLOPT_HTTPHEADER, ['apikey: ' . getenv("APIKEY")]);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PATCH');
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data_json);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        $output  = curl_exec($curl);
+        if ($output === false) {
+            trigger_error('Erreur curl : ' . curl_error($curl), E_USER_WARNING);
+        } else {
+            return $output;
+        }
+        curl_close($curl);
     }
 }

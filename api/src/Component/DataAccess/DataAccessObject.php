@@ -243,6 +243,7 @@ abstract class DataAccessObject
     protected function columnMap(): array
     {
         $map = [];
+
         foreach ($this->modelReflector->getProperties() as $property) {
             $name = $property->getName();
             $map[$name] = "{$this->table}_$name";
@@ -252,6 +253,7 @@ abstract class DataAccessObject
 
     protected function hydrateModel(Model $instance, array $row): Model
     {
+        
         foreach ($this->columnMap() as $propertyName => $columnName) {
             $property = $this->modelReflector->getProperty($propertyName);
 

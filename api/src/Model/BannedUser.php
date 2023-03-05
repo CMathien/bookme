@@ -21,7 +21,12 @@ class BannedUser extends User
     public function toArray(): array
     {
         $array = parent::toArray();
-        $array["banned"] = $this->getBanned();
+        if ($this->isInitialized("banned")) $array["banned"] = $this->getBanned();
         return $array;
+    }
+    public function isInitialized($param)
+    {
+        $rp = new \ReflectionProperty('Bookme\API\Model\BannedUser', $param);
+        return $rp->isInitialized($this);
     }
 }
