@@ -63,6 +63,10 @@ bookme_admin:
           path: /
           method: GET
           action: list
+        bookme_admin_genres_delete:
+          path: /(\d+)/delete
+          method: get
+          action: delete
     authors:
       prefix: /authors
       controller: Bookme\Admin\Controller\AuthorController

@@ -8,6 +8,7 @@ use Bookme\Admin\Component\Security\Security;
 abstract class BaseController
 {
     protected string $className;
+    protected string $route;
     protected string $title;
     protected array $columns;
 
@@ -15,6 +16,7 @@ abstract class BaseController
     {
         $className = str_replace(["Controller", "Bookme", "Admin", "/", "\\"], "", get_class($this));
         $this->className = $className;
+        $this->route = strtolower($this->className) . "s";
     }
 
     public function display()
@@ -33,7 +35,7 @@ abstract class BaseController
     {
         if (Security::checkAdmin()) {
             $api = new Api();
-            $entity = $this->className;
+            $entity = $this->route;
             $result = $api->list($entity);
             $result = json_decode($result, true);
             if (isset($result["data"]) && $result["data"] != "") {
@@ -68,7 +70,7 @@ abstract class BaseController
     public function getOne(int $id)
     {
         if (Security::checkAdmin()) {
-            $result = $this->getOneAPI($this->className, $id);
+            $result = $this->getOneAPI($this->route, $id);
             $entities = json_decode($result, true);
             $logged = true;
             include_once "../View/TableView.php";
@@ -92,7 +94,7 @@ abstract class BaseController
                     } elseif ($key == "author") {
                         $authors = [];
                         foreach ($property as $author) {
-                            $new = $this->getOneAPI("author", $author["id"]);
+                            $new = $this->getOneAPI("authors", $author["id"]);
                             $fn = ucfirst($new["first name"]);
                             $ln = strtoupper($new["last name"]);
                             $authors[] = $fn . " " . $ln;
@@ -101,7 +103,7 @@ abstract class BaseController
                     } elseif ($key == "genre") {
                         $genres = [];
                         foreach ($property as $genre) {
-                            $new = $this->getOneAPI("genre", $genre["id"]);
+                            $new = $this->getOneAPI("genres", $genre["id"]);
                             $genres[] = $new["label"];
                         }
                         $row[] = $genres;
@@ -114,5 +116,35 @@ abstract class BaseController
             $clean[] = $row;
         }
         return $clean;
+    }
+
+    public function update(array $data, int $id)
+    {
+        if (Security::checkAdmin()) {
+            $api = new Api();
+            $result = $api->patch($data, $this->route, $id);
+            $result = json_decode($result, true);
+            $logged = true;
+            header('location:/' . $this->route);
+            exit;
+        } else {
+            header('location:login');
+            exit;
+        }
+    }
+
+    public function delete(int $id)
+    {
+        if (Security::checkAdmin()) {
+            $api = new Api();
+            $result = $api->delete($this->route, $id);
+            $result = json_decode($result, true);
+            $logged = true;
+            header('location:/' . $this->route);
+            exit;
+        } else {
+            header('location:login');
+            exit;
+        }
     }
 }

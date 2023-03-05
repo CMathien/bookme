@@ -8,7 +8,7 @@ if (isset($entities) && !empty($entities)) {
     foreach ($this->columns as $column) {
         echo "<td>" . ucfirst($column) . "</td>";
     }
-
+    echo "<td></td>";
     echo "</tr></thead>";
     echo "<tbody>";
     foreach ($entities as $entity) {
@@ -40,6 +40,9 @@ if (isset($entities) && !empty($entities)) {
             }
             echo "<td>$value</td>";
         }
+
+        echo "<td align=right><a href='" . $this->route . "/$id/delete' class='btn btn-primary'>Supprimer</a></td>";
+
         echo "</tr>";
         echo "</tbody>";
     }

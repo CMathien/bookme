@@ -27,19 +27,9 @@ class UserController extends BaseController
 
     public function ban(int $id)
     {
-        if (Security::checkAdmin()) {
-            $api = new Api();
-            $data = [
-                "banned" => 1
-            ];
-            $result = $api->patch($data, "User", $id);
-            $result = json_decode($result, true);
-            $logged = true;
-            header('location:/users');
-            exit;
-        } else {
-            header('location:login');
-            exit;
-        }
+        $data = [
+            "banned" => 1
+        ];
+        $this->update($data, $id);
     }
 }

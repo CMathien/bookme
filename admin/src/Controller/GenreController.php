@@ -2,7 +2,9 @@
 
 namespace Bookme\Admin\Controller;
 
+use PHPUnit\Framework\MockObject\Api;
 use Bookme\Admin\Controller\BaseController;
+use Bookme\Admin\Component\Security\Security;
 
 class GenreController extends BaseController
 {
