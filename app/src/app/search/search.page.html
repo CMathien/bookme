@@ -1,0 +1,50 @@
+<ion-header>
+    <ion-toolbar>
+
+    </ion-toolbar>
+</ion-header>
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-searchbar animated="true" placeholder="Rechercher un ISBN" show-clear-button="always" [debounce]="1000" (ionChange)="search($event)" inputmode="numeric" (keypress)="numberOnlyValidation($event)"></ion-searchbar>
+    </ion-toolbar>
+</ion-header>
+    <ion-content class="ion-padding" [fullscreen]="true">
+    <ion-grid>
+        <ion-row>
+        <ion-col  col-12 col-xl-2 col-lg-3 col-md-4>
+            <ion-card *ngIf="result">
+                <ion-img [src]="book.img" alt="book cover" class="cover"></ion-img>
+                <ion-item>
+                    <h2 text-capitalize>{{book.title}}</h2>
+                </ion-item>
+            <ion-card-content>
+                <ion-item>
+                    <ion-icon name="bookmark-outline" class="book-icon"></ion-icon>
+                    <ion-label *ngFor="let isbn of book.isbns">{{isbn}}</ion-label>
+                  </ion-item>
+                  <ion-item>
+                    <ion-icon name="calendar-clear-outline" class="book-icon"></ion-icon>
+                    <ion-label>{{book.publishDate}}</ion-label>
+                  </ion-item>
+                  <ion-item>
+                    <ion-icon name="pencil-outline" class="book-icon"></ion-icon>
+                    <ion-label *ngFor="let author of book.authors">{{author.name}}</ion-label>
+                  </ion-item>
+                  <ion-item>
+                    <ion-icon name="book-outline" class="book-icon"></ion-icon>
+                    <ion-label *ngFor="let publisher of book.publishers">{{publisher}}</ion-label>
+                  </ion-item>
+            </ion-card-content>
+            </ion-card>
+            <ion-card *ngIf="!result">
+                <ion-item>
+                    <h2 text-capitalize>Aucun résultat</h2>
+                </ion-item>
+            <ion-card-content>
+                <p>Saisir un code ISBN valide pour voir une fiche</p>
+            </ion-card-content>
+            </ion-card>
+        </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>

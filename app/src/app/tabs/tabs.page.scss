@@ -1,1 +1,18 @@
+.ionic-title {
+    font-family: 'Radley', 'Times New Roman', Times, serif;
+}
+
+.float-right {
+    float: right;
+}
+
+.dgreen {
+    color: rgba(0, 0, 0, 0.7);
+}
+
+@media (prefers-color-scheme: dark) {
+    .dgreen {
+        color: #b4dfde;
+    }
+}
 
