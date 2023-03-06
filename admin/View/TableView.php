@@ -29,7 +29,7 @@ if (isset($entities) && !empty($entities)) {
                         $value = "<div class='green text-center'>&check;</div>";
                     } elseif ($property === null || $property === "null") {
                         if ($this->className === "User" && $k === 8) {
-                            $value = "<a href='users/$id/ban' class='btn btn-primary'>Bannir</a>";
+                            $value = "<a href='/users/$id/ban' class='btn btn-primary'>Bannir</a>";
                         } else $value = "";
                     } else {
                         $value = $property;
@@ -48,7 +48,7 @@ if (isset($entities) && !empty($entities)) {
         }
 
         echo "<td align=right>
-                <a href='" . $this->route . "/$id/delete'>
+                <a href='/" . $this->route . "/$id/delete'>
                     <div class='icon-trash'>
                         <div class='trash-lid' style='background-color: red'></div>
                         <div class='trash-container' style='background-color: red'></div>
