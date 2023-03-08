@@ -24,15 +24,19 @@ const routes: Routes = [
         loadChildren: () => import('../donations/donations.module').then( m => m.DonationsPageModule)
       },
       {
+        path: 'home',
+        loadChildren: () => import('../home/home.module').then( m => m.HomePageModule)
+      },
+      {
         path: '',
-        redirectTo: '/tabs/search',
+        redirectTo: '/tabs/home',
         pathMatch: 'full'
       }
     ]
   },
   {
     path: '',
-    redirectTo: '/tabs/search',
+    redirectTo: '/tabs/home',
     pathMatch: 'full'
   }
 ];

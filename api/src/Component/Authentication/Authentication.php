@@ -25,6 +25,7 @@ class Authentication
     public function authenticate()
     {
         $key = $_SERVER['HTTP_APIKEY'] ?? '';
+        
         $error = 0;
         if ($key != "") {
             $query = 'SELECT COUNT(1) FROM api_key WHERE api_key = :key;';

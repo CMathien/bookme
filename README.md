@@ -34,4 +34,5 @@ Book management app
 -Run `docker exec -i -w /bookme/api bookme-php-1 php vendor/bin/phpunit tests --verbose`
 
 ## Ionic
+- Create app/src/app/config/env.ts with your apikey
 - Run `docker exec -it bookme-app-1 ionic serve --external --public-host=app.bookme.local.com --no-open --ssl`

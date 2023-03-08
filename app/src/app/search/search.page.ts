@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ApiService } from '../config/api.service';
+import { AuthenticationService } from '../config/authentication.service';
 
 @Component({
   selector: 'app-search',
@@ -10,8 +11,11 @@ export class SearchPage {
 
     book :any = {} ;
     result: boolean = false;
+    isLogged: string | null;
 
-    constructor(public apiService: ApiService) {}
+    constructor(public apiService: ApiService, public authenticationService: AuthenticationService) {
+        this.isLogged = authenticationService.getAuthenticated();
+    }
 
     search(event: any){
         let value: string = event.target.value;

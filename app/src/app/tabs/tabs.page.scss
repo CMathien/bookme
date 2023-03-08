@@ -1,7 +1,10 @@
-.ionic-title {
+.ionic-title, .header-title {
     font-family: 'Radley', 'Times New Roman', Times, serif;
 }
 
+a.header-title {
+    text-decoration: none;
+}
 .float-right {
     float: right;
 }

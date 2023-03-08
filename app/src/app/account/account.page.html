@@ -1,17 +1,27 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 3
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
+<ion-header>
     <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
+      <ion-title>account</ion-title>
     </ion-toolbar>
   </ion-header>
+  
+  <ion-content class="ion-padding" [fullscreen]="true" *ngIf="!isLogged">
+    <form method="POST" [formGroup]="loginForm" (ngSubmit)="submitLogin()">
+        <ion-list>
+            <ion-item>
+                <ion-label position="floating">E-mail</ion-label>
+                <ion-input type="email" formControlName="email" required aria-required="true"></ion-input>
+            </ion-item>
+        
+            <ion-item>
+                <ion-label position="floating">Mot de passe</ion-label>
+                <ion-input type="password" formControlName="password" required aria-required="true"></ion-input>
+            </ion-item>
+        </ion-list>
+        <ion-button type="submit">Se connecter</ion-button>
+    </form>
+  </ion-content>
 
-
-</ion-content>
+  <ion-content class="ion-padding" [fullscreen]="true" *ngIf="isLogged">
+    <ion-button (click)="logout()">Se déconnecter</ion-button>
+  </ion-content>
+  
