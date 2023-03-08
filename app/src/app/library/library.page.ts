@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { AuthenticationService } from '../config/authentication.service';
+import { ApiService } from '../config/api.service';
 
 @Component({
   selector: 'app-library',
@@ -7,6 +9,8 @@ import { Component } from '@angular/core';
 })
 export class LibraryPage {
 
-  constructor() {}
+    constructor(public apiService: ApiService, public authenticationService: AuthenticationService) {
+        if (!authenticationService.getAuthenticated()) window.location.assign("/tabs/account");
+    }
 
 }

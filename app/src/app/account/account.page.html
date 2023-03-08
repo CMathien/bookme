@@ -18,10 +18,19 @@
             </ion-item>
         </ion-list>
         <ion-button type="submit">Se connecter</ion-button>
+        <a href="/tabs/newuser">Nouveau compte</a>
     </form>
   </ion-content>
 
-  <ion-content class="ion-padding" [fullscreen]="true" *ngIf="isLogged">
+<ion-content class="ion-padding" [fullscreen]="true" *ngIf="isLogged">
+    <ion-avatar>
+        <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+    </ion-avatar>
+    <p>{{user.pseudo}}</p>
+    <p>{{user.email}}</p>
+    <p>{{user.publicComments}}</p>
+    <p>{{user.balance}}</p>
+    <p>{{user.zipcode}}</p>
     <ion-button (click)="logout()">Se déconnecter</ion-button>
-  </ion-content>
+</ion-content>
   

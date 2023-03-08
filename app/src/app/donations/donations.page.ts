@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthenticationService } from '../config/authentication.service';
+import { ApiService } from '../config/api.service';
 
 @Component({
   selector: 'app-donations',
@@ -7,7 +9,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DonationsPage implements OnInit {
 
-  constructor() { }
+    constructor(public apiService: ApiService, public authenticationService: AuthenticationService) {
+        if (!authenticationService.getAuthenticated()) window.location.assign("/tabs/account");
+    }
 
   ngOnInit() {
   }

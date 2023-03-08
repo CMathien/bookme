@@ -32,5 +32,5 @@ export class AuthenticationService {
   getLoggedUser() {
     var data = sessionStorage.getItem('bookmeUser');
     return data;
-  }
+  } 
 }

@@ -33,7 +33,6 @@ export class ApiService {
      * @returns The return type is a subscription to the request.
      */
     public apiBodyFetch<Model>(endpoint: string, method: HttpBodyMethod, onSuccess: Function, body: Model) {
-        console.log(method)
         let req: Observable<any> = this.http[method](`${this.baseUrl}${endpoint}`, body, { headers: this.headers }).pipe(catchError(this.handleError));
         return req.subscribe((res) => onSuccess(res));
     }
@@ -76,7 +75,6 @@ export class ApiService {
      * @returns A function that returns a new Error object.
      */
     private handleError(error: HttpErrorResponse) {
-        console.log(error)
         if (error.status === 0) {
             console.error('An error occurred:', error.error);
         } else {

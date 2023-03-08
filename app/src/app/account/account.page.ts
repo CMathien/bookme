@@ -11,21 +11,43 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 })
 export class AccountPage {
     isLogged: string | null;
-    loginForm: FormGroup
+    user: any | null;
+    loginForm: FormGroup;
+
 
     constructor(public authenticationService: AuthenticationService, public apiService: ApiService) {
-        this.isLogged = authenticationService.getAuthenticated();
         this.loginForm = new FormGroup({
             email: new FormControl(),
             password: new FormControl()
-          });
+        });
+        this.isLogged = authenticationService.getAuthenticated();
+
+        if (this.isLogged === "true") {
+            let id = authenticationService.getLoggedUser();
+            this.apiService.apiFetch(`/users/${id}`, "get",  (res: any) => {
+                let tmp = res.data;
+                console.log(tmp)
+                this.user = {
+                    pseudo: tmp["pseudo"],
+                    email: tmp["email"],
+                    publicComments: tmp["publicComments"],
+                    balance: tmp["balance"],
+                    zipcode: tmp["zipcode"]["zipcode"],
+                }
+            })
+        }
+
     }
     ngOnInit(): void {
+        if (this.isLogged !== "true") this.setupLoginForm();
+    }
+
+    setupLoginForm() {
         this.loginForm = new FormGroup({
             email: new FormControl('', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')]),
             password: new FormControl("", [Validators.required])
           });
-      }
+    }
 
     submitLogin() {
         let email = this.loginForm.value.email;
@@ -42,7 +64,9 @@ export class AccountPage {
           };
 
         this.apiService.apiBodyFetch("/users/login", "post", (res: any) => {
-            if (res.status === "AUTHORIZED LOGIN") this.setLogin(res.id);
+            if (res.status === "AUTHORIZED LOGIN") {
+                this.setLogin(res.id);
+            }
         }, body);
     }
 
