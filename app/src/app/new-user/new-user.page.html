@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>new-user</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" [fullscreen]="true">
+    <form method="POST" [formGroup]="newUserForm" (ngSubmit)="submitUser()">
+        <ion-list>
+            <ion-item>
+                <ion-label position="floating">E-mail</ion-label>
+                <ion-input type="email" formControlName="email" required aria-required="true"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label position="floating">Pseudo</ion-label>
+                <ion-input type="text" formControlName="pseudo" required aria-required="true"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label position="floating">Code postal</ion-label>
+                <ion-input type="text" formControlName="zipcode" required aria-required="true" (keypress)="numberOnlyValidation($event)"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label position="floating">Ville</ion-label>
+                <ion-input type="text" formControlName="city" required aria-required="true"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label position="floating">Nouveau mot de passe</ion-label>
+                <ion-input type="password" formControlName="password" required aria-required="true" (keyup)="controlPassword($event)"></ion-input>
+                <ion-note slot="error" *ngIf="wrongPwd">Le mot de passe doit contenir 8 caractères minimum, et obligatoirement une minuscule, une majuscule et un chiffre.</ion-note>
+            </ion-item>
+            <ion-item>
+                <ion-label position="floating">Répéter le mot de passe</ion-label>
+                <ion-input type="password" formControlName="passwordControl" required aria-required="true" (keyup)="comparePassword($event)"></ion-input>
+                <ion-note slot="error" *ngIf="noCorresPwd">Les mots de passe ne correspondent pas.</ion-note>
+            </ion-item>
+        </ion-list>
+        <div class="ion-text-center">
+            <p>
+                <ion-button type="submit">Créer</ion-button>
+            </p>
+        </div>
+    </form>
+  </ion-content>

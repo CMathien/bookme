@@ -26,7 +26,6 @@ export class AccountPage {
             let id = authenticationService.getLoggedUser();
             this.apiService.apiFetch(`/users/${id}`, "get",  (res: any) => {
                 let tmp = res.data;
-                console.log(tmp)
                 this.user = {
                     pseudo: tmp["pseudo"],
                     email: tmp["email"],

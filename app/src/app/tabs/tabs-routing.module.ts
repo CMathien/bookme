@@ -28,6 +28,10 @@ const routes: Routes = [
         loadChildren: () => import('../home/home.module').then( m => m.HomePageModule)
       },
       {
+        path: 'new-user',
+        loadChildren: () => import('../new-user/new-user.module').then( m => m.NewUserPageModule)
+      },
+      {
         path: '',
         redirectTo: '/tabs/home',
         pathMatch: 'full'
