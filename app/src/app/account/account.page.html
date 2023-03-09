@@ -19,7 +19,7 @@
         </ion-list>
         <div class="ion-text-center">
             <p>
-                <ion-button type="submit">Se connecter</ion-button>
+                <ion-button type="submit" [disabled]="!loginForm.valid">Se connecter</ion-button>
             </p>
             <p>
                 <a href="/tabs/new-user">Nouveau compte</a>

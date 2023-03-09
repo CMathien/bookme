@@ -25,19 +25,20 @@
             </ion-item>
             <ion-item>
                 <ion-label position="floating">Nouveau mot de passe</ion-label>
-                <ion-input type="password" formControlName="password" required aria-required="true" (keyup)="controlPassword($event)"></ion-input>
+                <ion-input type="password" formControlName="password" required aria-required="true" (keyup)="controlPassword()"></ion-input>
                 <ion-note slot="error" *ngIf="wrongPwd">Le mot de passe doit contenir 8 caractères minimum, et obligatoirement une minuscule, une majuscule et un chiffre.</ion-note>
             </ion-item>
             <ion-item>
                 <ion-label position="floating">Répéter le mot de passe</ion-label>
-                <ion-input type="password" formControlName="passwordControl" required aria-required="true" (keyup)="comparePassword($event)"></ion-input>
+                <ion-input type="password" formControlName="passwordControl" required aria-required="true" (keyup)="comparePassword()"></ion-input>
                 <ion-note slot="error" *ngIf="noCorresPwd">Les mots de passe ne correspondent pas.</ion-note>
             </ion-item>
         </ion-list>
         <div class="ion-text-center">
             <p>
-                <ion-button type="submit">Créer</ion-button>
+                <ion-button type="submit" [disabled]="!canSubmit">Créer</ion-button>
             </p>
+            <p>{{errorMsg}}</p>
         </div>
     </form>
   </ion-content>
