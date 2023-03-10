@@ -47,8 +47,12 @@ export class ApiService {
      * pass in headers, you can do so here.
      * @returns The response from the API call.
      */
+    // public apiFetch(endpoint: string, method: HttpMethod, onSuccess: Function) {
+        // let req: Observable<any> = this.http[method](`${this.baseUrl}${endpoint}`, { headers: this.headers }).pipe(catchError(this.handleError));
+        // return req.subscribe((res) => onSuccess(res));
+    // }
     public apiFetch(endpoint: string, method: HttpMethod, onSuccess: Function) {
-        let req: Observable<any> = this.http[method](`${this.baseUrl}${endpoint}`, { headers: this.headers }).pipe(catchError(this.handleError));
+        let req: Observable<any> = this.http[method](`${this.baseUrl}${endpoint}`, { headers: this.headers });
         return req.subscribe((res) => onSuccess(res));
     }
 
