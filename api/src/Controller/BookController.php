@@ -189,4 +189,25 @@ class BookController extends BaseController
             $this->sendResponse($response, 200);
         }
     }
+
+    public function tryTitleYear()
+    {
+        $datas = $this->readInput();
+        $params = [
+            "book_title = \"" . $datas["title"] . "\"",
+            "book_release_year = \"" . $datas["releaseYear"] . "\""
+        ];
+        $className = $this->getClassName();
+        $classDAO = "Bookme\API\DataAccess\\" . $className . "DAO";
+        $dao = new $classDAO($this->db);
+        $data = $dao->getMany($params);
+
+        $response = [
+            'status' => strtoupper($className) . '_FOUND',
+            'message' => '',
+            'count' => count($data),
+            'data' => $data,
+        ];
+        $this->sendResponse($response, 200);
+    }
 }

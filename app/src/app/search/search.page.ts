@@ -72,21 +72,32 @@ export class SearchPage {
             title: this.book.title,
             releaseYear: this.book.publishDate
         }
-        this.apiService.apiBodyFetch("/books", "post", (res: any) => {
-            if (res.status === "BOOK_CREATED") {
-                let id = res.data["id"]
+        this.apiService.apiBodyFetch("/books/try", "post", (res: any) => {
+            if (res.count > 0) {
+                let id = res.data[0]["id"]
                 if (this.book.isbns) this.linkIsbn(id);
                 if (this.book.authors) this.createAuthor(id);
                 this.createPossessedbook(id);
-                
                 return true;
             } else {
+                this.apiService.apiBodyFetch("/books", "post", (res: any) => {
+                    if (res.status === "BOOK_CREATED") {
+                        let id = res.data["id"]
+                        if (this.book.isbns) this.linkIsbn(id);
+                        if (this.book.authors) this.createAuthor(id);
+                        this.createPossessedbook(id);
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }, body);
                 return false;
             }
         }, body);
     }
 
     createAuthor(book_id: any) {
+
         this.book.authors.forEach((author: any) => {
             let tmp = author.name.split(' ');
             let firstname: string = "";
@@ -100,21 +111,32 @@ export class SearchPage {
                 lastName: lastname,
                 firstName: firstname
             }
-
-            this.apiService.apiBodyFetch("/authors", "post", (res: any) => {
-                if (res.status === "AUTHOR_CREATED") {
-                    let id = res.data["id"]
+            this.apiService.apiBodyFetch("/authors/try", "post", (res: any) => {
+                if (res.count > 0) {
+                    let id = res.data[0]["id"];
                     let bodyLink = {
                         author_id: id
                     }
                     this.apiService.apiBodyFetch(`/books/${book_id}/author`, "post", (res: any) => {}, bodyLink);
+                } else {
+                    this.apiService.apiBodyFetch("/authors", "post", (res: any) => {
+                        if (res.status === "AUTHOR_CREATED") {
+                            let id = res.data["id"]
+                            let bodyLink = {
+                                author_id: id
+                            }
+                            this.apiService.apiBodyFetch(`/books/${book_id}/author`, "post", (res: any) => {}, bodyLink);
+                        }
+                    }, body);
                 }
-            }, body);
+            }, body)
         });
     }
 
     linkIsbn(book_id: any) {
         this.book.isbns.forEach((isbn:any) => {
+            isbn = isbn.replace(/[^0-9]/g, '');
+            this.apiService.apiFetch(`/books/${isbn}/isbn`, "delete", (res: any) => {});
             let body = {
                 isbn: isbn
             }

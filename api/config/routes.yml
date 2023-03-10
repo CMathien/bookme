@@ -72,6 +72,10 @@ bookme_api:
           path: /(\d+)/
           method: DELETE
           action: delete
+        bookme_api_books_same_title_year:
+          path: /try
+          method: POST
+          action: tryTitleYear
         bookme_api_books_comment:
           path: /(\d+)/comment/
           method: POST
@@ -124,6 +128,10 @@ bookme_api:
           path: /(\d+)/
           method: DELETE
           action: delete
+        bookme_api_authors_same_name:
+          path: /try
+          method: POST
+          action: tryName
     bookme_api_genres:
       prefix: /genres
       controller: Bookme\API\Controller\GenreController
