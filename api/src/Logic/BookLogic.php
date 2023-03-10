@@ -28,7 +28,7 @@ class BookLogic extends BaseLogic
         parent::iterateProperties($model, $key, $value);
     }
 
-    public function isbnExists(int $book, int $isbn)
+    public function isbnExists(int $book, string $isbn)
     {
         $daoClassName = new BookDAO($this->db);
         $result = $daoClassName->getMany(["book_id = $book", "book_isbn = $isbn"]);
@@ -59,5 +59,10 @@ class BookLogic extends BaseLogic
         } else {
             return false;
         }
+    }
+
+    public function cleanIsbn(string $isbn)
+    {
+        return preg_replace('/[^0-9]/', '', $isbn);
     }
 }

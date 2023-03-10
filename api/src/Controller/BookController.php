@@ -22,11 +22,12 @@ class BookController extends BaseController
         $logic = new BookLogic($this->db);
         $dao = new BookDAO($this->db);
 
-        if ($logic->isbnExists($book, $datas["isbn"])) {
-            $dao->unlinkIsbn($datas["isbn"]);
+        $isbn = $logic->cleanIsbn($datas["isbn"]);
+        if ($logic->isbnExists($book, $isbn)) {
+            $dao->unlinkIsbn($isbn);
         }
 
-        $record = $dao->linkToIsbn($book, $datas["isbn"]);
+        $record = $dao->linkToIsbn($book, $isbn);
 
         if (false === $record) {
             $response = [
@@ -48,6 +49,8 @@ class BookController extends BaseController
     public function unlinkIsbn($isbn)
     {
         $dao = new BookDAO($this->db);
+        $logic = new BookLogic($this->db);
+        $isbn = $logic->cleanIsbn($isbn);
         $record = $dao->unlinkIsbn($isbn);
 
         if (false === $record) {

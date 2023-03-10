@@ -19,7 +19,6 @@ export class SearchPage {
 
     search(event: any){
         let value: string = event.target.value;
-
         this.apiService.apiFetchOL(value, "get", (res: any) => {
             if (res) {
                 let obj = res["ISBN:"+value];
@@ -44,12 +43,14 @@ export class SearchPage {
                             let code_3 = element.slice(4, 7);
                             let code_4 = element.slice(7, 12);
                             let code_5 = element.slice(12);
-                            let new_isbn= code_1 + "-" + code_2 + "-" + code_3 + "-" + code_4 + "-" + code_5;;
+                            let new_isbn= code_1 + "-" + code_2 + "-" + code_3 + "-" + code_4 + "-" + code_5;
+                            new_isbn = new_isbn.replace(/-$/,"");
                             clean_isbns.push(new_isbn);
                         });
                     }
                     this.book.isbns = clean_isbns;
-                    this.book.publishDate = obj.details.publish_date;
+                    let date = new Date(obj.details.publish_date);
+                    this.book.publishDate = date.getFullYear();
                     this.book.authors = obj.details.authors;
                     this.book.publishers = obj.details.publishers;
                     this.result = true;
@@ -61,7 +62,6 @@ export class SearchPage {
     numberOnlyValidation(event: any) {
         const pattern = /[0-9]/;
         let inputChar = String.fromCharCode(event.charCode);
-    
         if (!pattern.test(inputChar)) {
             event.preventDefault();
         }
@@ -72,12 +72,13 @@ export class SearchPage {
             title: this.book.title,
             releaseYear: this.book.publishDate
         }
-
         this.apiService.apiBodyFetch("/books", "post", (res: any) => {
             if (res.status === "BOOK_CREATED") {
                 let id = res.data["id"]
-                this.linkIsbn(id);
+                if (this.book.isbns) this.linkIsbn(id);
+                if (this.book.authors) this.createAuthor(id);
                 this.createPossessedbook(id);
+                
                 return true;
             } else {
                 return false;
@@ -87,12 +88,11 @@ export class SearchPage {
 
     createAuthor(book_id: any) {
         this.book.authors.forEach((author: any) => {
-            let tmp = author.split(' ');
-            let i = 0;
+            let tmp = author.name.split(' ');
             let firstname: string = "";
             let lastname: string = "";
-            tmp.forEach((key: string) => {
-                if (i === 0) firstname = key;
+            tmp.forEach((key: string, index: number) => {
+                if (index === 0) firstname = key;
                 else lastname = lastname + " " + key
             })
             lastname = lastname.trim()
@@ -100,7 +100,7 @@ export class SearchPage {
                 lastName: lastname,
                 firstName: firstname
             }
-    
+
             this.apiService.apiBodyFetch("/authors", "post", (res: any) => {
                 if (res.status === "AUTHOR_CREATED") {
                     let id = res.data["id"]
@@ -132,17 +132,10 @@ export class SearchPage {
             user: user_id,
             toDonate: false
         };
-   
         this.apiService.apiBodyFetch(`/pbooks`, "post", (res: any) => {
-            window.location.assign("/tabs/library");
+            setTimeout(function() {
+                window.location.assign("/tabs/library");
+              }, 1000);
         }, body);
-
     }
-
-    handleRefresh(event: any) {
-        setTimeout(() => {
-          // Any calls to load data go here
-          event.target.complete();
-        }, 2000);
-    };
 }

@@ -11,7 +11,7 @@
         <ion-refresher-content ion-refresher-content></ion-refresher-content>
     </ion-refresher>
     <ion-grid>
-        <ion-row>
+        <ion-row *ngIf="result">
             <ion-col *ngFor="let pbook of pbooks" col-12 col-xl-2 col-lg-3 col-md-4>
                 <ion-card class="ion-card-pbook">
                     <ion-img src="../../assets/img/bookme-logo.png" alt="book cover-sm" class="cover"></ion-img>
@@ -23,7 +23,7 @@
                     <ion-card-content>
                         <ion-item>
                             <ion-icon name="bookmark-outline" class="book-icon"></ion-icon>
-                            <ion-label>{{pbook.isbn}}</ion-label>
+                            <ion-label>{{formatIsbn(pbook.isbn)}}</ion-label>
                         </ion-item>
                         <ion-item>
                             <ion-icon name="calendar-clear-outline" class="book-icon"></ion-icon>
@@ -31,7 +31,11 @@
                         </ion-item>
                         <ion-item>
                             <ion-icon name="pencil-outline" class="book-icon"></ion-icon>
-                            <ion-label *ngFor="let author of pbook.author">{{author["first name"]}} {{author["last name"]}}</ion-label>
+                            <ion-label>
+                                <div *ngFor="let author of pbook.author">
+                                    {{author["first name"]}} {{author["last name"]}}
+                                </div>
+                            </ion-label>
                         </ion-item>
                     </ion-card-content>
                     <ion-row>
@@ -47,6 +51,14 @@
                             </ion-button>
                         </ion-col>
                     </ion-row>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+        <ion-row *ngIf="!result">
+            <ion-col class="ion-text-center">
+                <ion-card>
+                    <ion-img src="../../assets/img/bookme-logo.png" alt="book cover" class="cover"></ion-img>
+                    <h2 text-capitalize>Aucun livre dans votre bibliothèque</h2>
                 </ion-card>
             </ion-col>
         </ion-row>
