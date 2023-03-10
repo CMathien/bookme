@@ -72,6 +72,11 @@ export class ApiService {
         return req.subscribe((res) => onSuccess(res));
     }
 
+    public apiBodyFetchLogin<Model>(endpoint: string, method: HttpBodyMethod, onSuccess: Function, body: Model) {
+        let req: Observable<any> = this.http[method](`${this.baseUrl}${endpoint}`, body, { headers: this.headers });
+        return req.subscribe((res) => onSuccess(res));
+    }
+
     /**
      * If the error is a client-side error, log it to the console. If it's a server-side error, log it
      * to the console and return an error message

@@ -48,10 +48,10 @@ class UserController extends BaseController
 
         if (!$data) {
             $response = [
-                'status' => 'ERROR',
+                'status' => 'NO LOGIN',
                 'message' => 'An error occured when checking the user\'s information',
             ];
-            $this->sendResponse($response, 400);
+            $this->sendResponse($response, 404);
         } else {
             $logic = new UserLogic($this->db);
             if (!$logic->checkPassword($datas["password"], $data["user_password"])) {
@@ -73,5 +73,45 @@ class UserController extends BaseController
             ];
             $this->sendResponse($response, 200);
         }
+    }
+
+    public function tryEmail()
+    {
+        $datas = $this->readInput();
+        $params = [
+            "user_email = \"" . $datas["email"] . "\""
+        ];
+        $className = $this->getClassName();
+        $classDAO = "Bookme\API\DataAccess\\" . $className . "DAO";
+        $dao = new $classDAO($this->db);
+        $data = $dao->getMany($params);
+
+        $response = [
+            'status' => strtoupper($className) . '_FOUND',
+            'message' => '',
+            'count' => count($data),
+            'data' => $data,
+        ];
+        $this->sendResponse($response, 200);
+    }
+
+    public function tryPseudo()
+    {
+        $datas = $this->readInput();
+        $params = [
+            "user_pseudo = \"" . $datas["pseudo"] . "\""
+        ];
+        $className = $this->getClassName();
+        $classDAO = "Bookme\API\DataAccess\\" . $className . "DAO";
+        $dao = new $classDAO($this->db);
+        $data = $dao->getMany($params);
+
+        $response = [
+            'status' => strtoupper($className) . '_FOUND',
+            'message' => '',
+            'count' => count($data),
+            'data' => $data,
+        ];
+        $this->sendResponse($response, 200);
     }
 }

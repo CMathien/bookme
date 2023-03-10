@@ -1,3 +1,8 @@
 .ionic-title, .header-title, ion-button {
     font-family: 'Radley', 'Times New Roman', Times, serif;
 }
+
+.errorMsg {
+    font-size: small;
+    color: var(--ion-color-danger);
+}

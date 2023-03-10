@@ -9,29 +9,31 @@
         <ion-list>
             <ion-item>
                 <ion-label position="floating">E-mail</ion-label>
-                <ion-input type="email" formControlName="email" required aria-required="true"></ion-input>
+                <ion-input type="email" formControlName="email" required aria-required="true" (change)="controlEmail()"></ion-input>
+                <p class="errorMsg" *ngIf="emailExists">Cet email est déjà associé à un compte.</p>
             </ion-item>
             <ion-item>
                 <ion-label position="floating">Pseudo</ion-label>
-                <ion-input type="text" formControlName="pseudo" required aria-required="true"></ion-input>
+                <ion-input type="text" formControlName="pseudo" required aria-required="true" (change)="controlPseudo()"></ion-input>
+                <p class="errorMsg" *ngIf="pseudoExists">Ce pseudo est déjà utilisé.</p>
             </ion-item>
             <ion-item>
                 <ion-label position="floating">Code postal</ion-label>
                 <ion-input type="text" formControlName="zipcode" required aria-required="true" (keypress)="numberOnlyValidation($event)"></ion-input>
             </ion-item>
-            <ion-item>
+            <!-- <ion-item>
                 <ion-label position="floating">Ville</ion-label>
                 <ion-input type="text" formControlName="city" required aria-required="true"></ion-input>
-            </ion-item>
+            </ion-item> -->
             <ion-item>
                 <ion-label position="floating">Nouveau mot de passe</ion-label>
                 <ion-input type="password" formControlName="password" required aria-required="true" (keyup)="controlPassword()"></ion-input>
-                <ion-note slot="error" *ngIf="wrongPwd">Le mot de passe doit contenir 8 caractères minimum, et obligatoirement une minuscule, une majuscule et un chiffre.</ion-note>
+                <p class="errorMsg" *ngIf="wrongPwd">Le mot de passe doit contenir 8 caractères minimum, et obligatoirement une minuscule, une majuscule et un chiffre.</p>
             </ion-item>
             <ion-item>
                 <ion-label position="floating">Répéter le mot de passe</ion-label>
                 <ion-input type="password" formControlName="passwordControl" required aria-required="true" (keyup)="comparePassword()"></ion-input>
-                <ion-note slot="error" *ngIf="noCorresPwd">Les mots de passe ne correspondent pas.</ion-note>
+                <p class="errorMsg" *ngIf="noCorresPwd">Les mots de passe ne correspondent pas.</p>
             </ion-item>
         </ion-list>
         <div class="ion-text-center">

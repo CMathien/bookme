@@ -13,7 +13,7 @@ export class AccountPage {
     isLogged: string | null;
     user: any | null;
     loginForm: FormGroup;
-
+    errorMsg: boolean;
 
     constructor(public authenticationService: AuthenticationService, public apiService: ApiService) {
         this.loginForm = new FormGroup({
@@ -21,7 +21,7 @@ export class AccountPage {
             password: new FormControl()
         });
         this.isLogged = authenticationService.getAuthenticated();
-
+        this.errorMsg = false;
         if (this.isLogged === "true") {
             let id = authenticationService.getLoggedUser();
             this.apiService.apiFetch(`/users/${id}`, "get",  (res: any) => {
@@ -51,20 +51,32 @@ export class AccountPage {
     submitLogin() {
         let email = this.loginForm.value.email;
         let password = this.loginForm.value.password;
-
-        interface BodyLogin {
-            email: string;
-            password: number;
+        let body = {
+            email: email
         }
+        this.apiService.apiBodyFetch("/users/email", "post", (res: any) => {
+            if (res.count > 0) {
+                
+                interface BodyLogin {
+                    email: string;
+                    password: number;
+                }
 
-        let body: BodyLogin = {
-            email: email,
-            password: password,
-          };
+                let body: BodyLogin = {
+                    email: email,
+                    password: password,
+                };
 
-        this.apiService.apiBodyFetch("/users/login", "post", (res: any) => {
-            if (res.status === "AUTHORIZED LOGIN") {
-                this.setLogin(res.id);
+                this.apiService.apiBodyFetch("/users/login", "post", (res: any) => {
+                    if (res.status === "AUTHORIZED LOGIN") {
+                        this.errorMsg = false;
+                        this.setLogin(res.id);
+                    } else {
+                        this.errorMsg = true;
+                    }
+                }, body);
+            } else {
+                this.errorMsg = true;
             }
         }, body);
     }

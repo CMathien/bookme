@@ -24,6 +24,14 @@ bookme_api:
           method: PATCH
           path: /(\d+)/
           action: update
+        bookme_api_user_email:
+          method: POST
+          path: /email
+          action: tryEmail
+        bookme_api_user_pseudo:
+          method: POST
+          path: /pseudo
+          action: tryPseudo
         bookme_api_user_list_books:
           method: GET
           path: /(\d+)/books

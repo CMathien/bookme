@@ -16,6 +16,7 @@
                 <ion-label position="floating">Mot de passe</ion-label>
                 <ion-input type="password" formControlName="password" required aria-required="true"></ion-input>
             </ion-item>
+            <p class="errorMsg" *ngIf="errorMsg">E-mail ou mot de passe incorrect.</p>
         </ion-list>
         <div class="ion-text-center">
             <p>
