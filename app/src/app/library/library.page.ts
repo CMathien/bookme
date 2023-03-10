@@ -10,6 +10,8 @@ import { ApiService } from '../config/api.service';
 export class LibraryPage {
 
     pbooks: any;
+    clean_pbooks: any;
+    authors: any;
     user: any;
 
     constructor(public apiService: ApiService, public authenticationService: AuthenticationService) {
@@ -24,6 +26,19 @@ export class LibraryPage {
     loadLibrary() {
         this.apiService.apiFetch(`/users/${this.user}/books`, "get", (res: any) => {
             this.pbooks = res.data;
+            let _this = this;
+            this.pbooks.forEach(function(pbook:any, i: number) {
+                if (pbook.author) {
+                    pbook.author.forEach(function(author:any, j: number) {
+                        _this.apiService.apiFetch(`/authors/${author.id}`, "get", (res: any) => {
+                            author = res.data;
+                            _this.pbooks[i].author[j] = author;
+                        })
+                    })
+                }
+            });
+        console.log(this.pbooks)
+
         })
     }
 
@@ -33,5 +48,19 @@ export class LibraryPage {
             event.target.complete();
         }, 2000);
     };
+
+    removeFromLibrary(id:number) {
+        this.apiService.apiFetch(`/pbooks/${id}`, "delete", (res: any) => {
+            this.handleRefresh(event);
+        })
+    }
+
+    setAsDonation() {
+        
+    }
+    
+    removeFromDonation() {
+        
+    }
 
 }

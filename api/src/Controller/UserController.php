@@ -3,14 +3,14 @@
 namespace Bookme\API\Controller;
 
 use Bookme\API\Logic\UserLogic;
-use Bookme\API\DataAccess\BookDAO;
+use Bookme\API\DataAccess\PossessedBookDAO;
 use Bookme\API\DataAccess\UserDAO;
 
 class UserController extends BaseController
 {
     public function listUsersBooks(int $user_id)
     {
-        $dao = new BookDAO($this->db);
+        $dao = new PossessedBookDAO($this->db);
         $data = $dao->getMany([$user_id]);
 
         $response = [
