@@ -5,7 +5,16 @@
 </ion-header>
 <ion-header>
     <ion-toolbar color="primary">
-        <ion-searchbar animated="true" placeholder="Rechercher un ISBN" show-clear-button="always" [debounce]="1000" (ionChange)="search($event)" inputmode="numeric" (keypress)="numberOnlyValidation($event)"></ion-searchbar>
+        <ion-row>
+            <ion-col>
+                <ion-searchbar animated="true" placeholder="Rechercher un ISBN" show-clear-button="always" [debounce]="1000" (ionChange)="search($event)" inputmode="numeric" (keypress)="numberOnlyValidation($event)"></ion-searchbar>
+            </ion-col>
+            <ion-col size="auto" *ngIf="platform.is('hybrid')">
+                <ion-button fill="clear" (click)="scanBarcode()">
+                    <ion-icon name="barcode-outline" class="dgreen"></ion-icon>
+                </ion-button>
+            </ion-col>
+        </ion-row>
     </ion-toolbar>
 </ion-header>
     <ion-content class="ion-padding" [fullscreen]="true">

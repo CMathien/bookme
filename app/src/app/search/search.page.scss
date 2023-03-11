@@ -6,3 +6,12 @@
 .book-icon{
     margin-right: 10px;
 }
+
+.dgreen {
+    color: rgba(0, 0, 0, 0.7);
+}
+
+body.scanner-active {
+    --background: transparent;
+    --ion-background-color: transparent;
+}

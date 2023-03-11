@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { ApiService } from '../config/api.service';
 import { AuthenticationService } from '../config/authentication.service';
+import { BarcodescannerService } from '../config/barcodescanner.service';
+import { Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-search',
@@ -12,13 +14,19 @@ export class SearchPage {
     book :any = {} ;
     result: boolean = false;
     isLogged: string | null;
+    platform: Platform;
 
-    constructor(public apiService: ApiService, public authenticationService: AuthenticationService) {
+    constructor(public apiService: ApiService, public authenticationService: AuthenticationService, public barcodescannerService: BarcodescannerService, platform: Platform) {
         this.isLogged = authenticationService.getAuthenticated();
+        this.platform = platform;
     }
 
     search(event: any){
         let value: string = event.target.value;
+        this.callApi(value);
+    }
+
+    callApi(value: string) {
         this.apiService.apiFetchOL(value, "get", (res: any) => {
             if (res) {
                 let obj = res["ISBN:"+value];
@@ -159,5 +167,13 @@ export class SearchPage {
                 window.location.assign("/tabs/library");
               }, 1000);
         }, body);
+    }
+
+    scanBarcode() {
+        this.barcodescannerService.scan().then(res => {
+            if (res) {
+                this.callApi(res);
+            }
+        });
     }
 }
