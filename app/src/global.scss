@@ -30,6 +30,6 @@ body.scanner-active {
     --ion-background-color: transparent;
 }
 
-body.scanner-active ion-content{
+body.scanner-active ion-content, body.scanner-active .second-header{
     display: none;
 }
