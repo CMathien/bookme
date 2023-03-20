@@ -25,9 +25,11 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
-.scanner-ui { display: none; }
-.scanner-hide { visibility: visible; }
+body.scanner-active {
+    --background: transparent;
+    --ion-background-color: transparent;
+}
 
-body.qrscanner { background-color: transparent; }
-body.qrscanner .scanner-ui { display: block; }
-body.qrscanner .scanner-hide { visibility: hidden; }
+body.scanner-active ion-content{
+    display: none;
+}

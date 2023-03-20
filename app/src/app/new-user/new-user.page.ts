@@ -116,7 +116,6 @@ export class NewUserPage {
     }
 
     control() {
-        console.log(this.wrongPwd, this.noCorresPwd, !this.newUserForm.valid, this.emailExists, this.pseudoExists);
         if (this.wrongPwd === true) this.canSubmit = false;
         else if (this.noCorresPwd === true) this.canSubmit = false;
         else if (!this.newUserForm.valid) this.canSubmit = false;
