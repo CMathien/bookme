@@ -7,7 +7,6 @@ import { BarcodeScanner } from '@capacitor-community/barcode-scanner';
 
 export class BarcodescannerService {
 
-    qrCodeString = 'This is a secret qr code message';
     scannedResult: any;
     content_visibility = '';
     constructor() {}
