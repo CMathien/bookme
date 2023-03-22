@@ -46,7 +46,7 @@ abstract class BaseController
     public function list()
     {
         if (Security::checkAdmin()) {
-            $api = new Api();
+            $api = new API();
             $entity = $this->route;
             $result = $api->list($entity);
             $result = json_decode($result, true);
@@ -66,7 +66,7 @@ abstract class BaseController
     {
         $entities = "";
         if (Security::checkAdmin()) {
-            $api = new Api();
+            $api = new API();
             $result = $api->getOne($entity, $id);
             $result = json_decode($result, true);
             if (isset($result["data"]) && $result["data"] != "") {
@@ -133,7 +133,7 @@ abstract class BaseController
     public function update(array $data, int $id)
     {
         if (Security::checkAdmin()) {
-            $api = new Api();
+            $api = new API();
             $result = $api->patch($data, $this->route, $id);
             $result = json_decode($result, true);
             $logged = true;
@@ -148,7 +148,7 @@ abstract class BaseController
     public function delete(int $id)
     {
         if (Security::checkAdmin()) {
-            $api = new Api();
+            $api = new API();
             $result = $api->delete($this->route, $id);
             $result = json_decode($result, true);
             $logged = true;
@@ -163,7 +163,7 @@ abstract class BaseController
     public function post(array $data)
     {
         if (Security::checkAdmin()) {
-            $api = new Api();
+            $api = new API();
             $result = $api->post($data, $this->route);
             $result = json_decode($result, true);
             $logged = true;
